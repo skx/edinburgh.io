@@ -75,13 +75,34 @@ foreach my $venue ( keys %DATA )
       HTML::Template->new( arrayref          => \@venue,
                            die_on_bad_params => 0 );
 
-    my $lat  = $DATA{ $venue }{ 'latitude' }   || die "No latitude";
-    my $long = $DATA{ $venue }{ 'longditude' } || die "No longditude";
-    my $name = $DATA{ $venue }{ 'name' }       || die "No name";
-    my $sname = $DATA{ $venue }{ 'sname' };
+    #
+    #  The images for this pub
+    #
+    my $images = undef;
+    my $sname = $DATA{$venue}{'sname'};
+    foreach my $img ( sort( glob( "images/$sname*" ) ) )
+    {
+        push( @$images, { path  => $img } );
+    }
+
     $sname .= ".html";
 
-    $template->param( lat => $lat, long => $long, name => $name );
+    my $name = $DATA{ $venue }{ 'name' };
+    $name =~ s/^the //gi;
+    my $beg = substr( $name, 0, 1 );
+    $beg = lc($beg);
+
+    $template->param( $DATA{$venue} );
+    $template->param( letter => $beg );
+
+    if ( $images )
+    {
+        $template->param( images => $images, has_images => 1 );
+    }
+    else
+    {
+        print "$sname missing images\n";
+    }
 
     #
     #  Output.
@@ -226,10 +247,14 @@ venue.tmpl:
   <!DOCTYPE html>
   <html>
   <head>
+
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/portfolio.pack.min.js"></script>
+
   <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false">
   </script>
   <script>
-  var myCenter=new google.maps.LatLng(<!-- tmpl_var name='lat' -->,<!-- tmpl_var name='long' -->);
+  var myCenter=new google.maps.LatLng(<!-- tmpl_var name='latitude' -->,<!-- tmpl_var name='longditude' -->);
   function initialize()
   {
     var mapProp = { center:myCenter, zoom:14, mapTypeId:google.maps.MapTypeId.ROADMAP  };
@@ -242,11 +267,39 @@ venue.tmpl:
   }
   google.maps.event.addDomListener(window, 'load', initialize);
   </script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+            var p = $("#gallery").portfolio();
+            p.init();
+    });
+  </script>
   </head>
   <body>
-  <h2><!-- tmpl_var name='name' --></h2>
-  <p>TODO:  Address, photos,etc.</p>
+  <h2><a href="/a-z/">A-Z</a> &gt; <a href="/a-z/<!-- tmpl_var name='letter' -->/"><!-- tmpl_var name='letter' --></a> &gt; <!-- tmpl_var name='name' --></h2>
+  <blockquote>
+  <!-- tmpl_var name='address' -->
+  <!-- tmpl_if name='telephone' -->
+   <p>Telephone: <!-- tmpl_var name='telephone' --></p>
+  <!-- /tmpl_if -->
+  <!-- tmpl_if name='website' -->
+   <p>Website: <!-- tmpl_var name='website' --></p>
+  <!-- /tmpl_if -->
+  </blockquote>
+
+  <!-- tmpl_if name='has_images' -->
+  <h2>Images</h2>
+  <blockquote>
+  <div id="gallery">
+  <!-- tmpl_loop name='images' -->
+    <img data-src="/<!-- tmpl_var name='path' -->" />
+  <!-- /tmpl_loop -->
+  </div>
+  </blockquote>
+  <!-- /tmpl_if name='images' -->
+  <h2>Map</h2>
+  <blockquote>
   <div id="googleMap" style="width:500px;height:380px;"></div>
+  </blockquote>
   </body>
   </html>
 letter.tmpl:
