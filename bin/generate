@@ -3,10 +3,8 @@
 #  To script to read ./data/*.xml and generate a series of static
 # html-files.
 #
-#  TODO: Make indexes, handle images, etc.
-#
-#
-
+# Steve
+# --
 
 
 use strict;
@@ -179,7 +177,6 @@ foreach my $letter ( 'a' ... 'z' )
 #  Now the a-z
 #
 my @az = loadTemplate("a-z.tmpl");
-
 my $template = HTML::Template->new( arrayref          => \@az,
                                     die_on_bad_params => 0 );
 
@@ -187,6 +184,27 @@ $template->param( letters => $letters );
 open( my $handle, ">", "$CONFIG{'output'}/a-z/index.html" );
 print $handle $template->output();
 close($handle);
+
+
+
+#
+#  Finally output the XML file.
+#
+my @xml   = loadTemplate( "xml.tmpl" );
+$template = HTML::Template->new( arrayref          => \@xml,
+                                 die_on_bad_params => 0 );
+
+my $xml;
+foreach my $key ( sort keys %DATA )
+{
+    push(@$xml, $DATA{$key});
+}
+$template->param( xml => $xml );
+open( my $xhandle, ">", "$CONFIG{'output'}/pubs/index.xml" );
+print $xhandle $template->output();
+close($xhandle);
+
+
 
 
 =begin doc
@@ -333,4 +351,13 @@ a-z.tmpl:
     <!-- /tmpl_if -->
   <!-- /tmpl_loop -->
   </ul>
-
+xml.tmpl:
+  <!-- tmpl_loop name='xml' -->
+  <pub>
+  <name><!-- tmpl_var name='name' --></name>
+  <address><!-- tmpl_var name='address' --></address>
+  <latitude><!-- tmpl_var name='latitude' --></latitude>
+  <longditude><!-- tmpl_var name='longditude' --></longditude>
+  <website><!-- tmpl_var name='website' --></website>
+  </pub>
+  <!-- /tmpl_loop -->
