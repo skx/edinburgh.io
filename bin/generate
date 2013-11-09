@@ -77,10 +77,10 @@ foreach my $venue ( keys %DATA )
     #  The images for this pub
     #
     my $images = undef;
-    my $sname = $DATA{$venue}{'sname'};
-    foreach my $img ( sort( glob( "images/$sname*" ) ) )
+    my $sname  = $DATA{ $venue }{ 'sname' };
+    foreach my $img ( sort( glob("images/$sname*") ) )
     {
-        push( @$images, { path  => $img } );
+        push( @$images, { path => $img } );
     }
 
     $sname .= ".html";
@@ -90,10 +90,10 @@ foreach my $venue ( keys %DATA )
     my $beg = substr( $name, 0, 1 );
     $beg = lc($beg);
 
-    $template->param( $DATA{$venue} );
+    $template->param( $DATA{ $venue } );
     $template->param( letter => $beg );
 
-    if ( $images )
+    if ($images)
     {
         $template->param( images => $images, has_images => 1 );
     }
@@ -190,14 +190,14 @@ close($handle);
 #
 #  Finally output the XML file.
 #
-my @xml   = loadTemplate( "xml.tmpl" );
+my @xml = loadTemplate("xml.tmpl");
 $template = HTML::Template->new( arrayref          => \@xml,
                                  die_on_bad_params => 0 );
 
 my $xml;
 foreach my $key ( sort keys %DATA )
 {
-    push(@$xml, $DATA{$key});
+    push( @$xml, $DATA{ $key } );
 }
 $template->param( xml => $xml );
 open( my $xhandle, ">", "$CONFIG{'output'}/pubs/index.xml" );
@@ -209,7 +209,7 @@ close($xhandle);
 #
 #  Here.
 #
-my @ind   = loadTemplate( "index.tmpl" );
+my @ind = loadTemplate("index.tmpl");
 $template = HTML::Template->new( arrayref          => \@ind,
                                  die_on_bad_params => 0 );
 $template->param( coords => $xml );
