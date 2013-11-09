@@ -1,29 +1,41 @@
 edinburgh.io
 ============
 
-This repository will build the website located at http://edinburgh.io/
+This repository contains a collection of data relating to Public Houses,
+located in Edinburgh, Scotland.
 
-The website will contain a list of pubs, along with contact details, photographs, & etc.
+As well as the data there is a simple tool which will read this data
+and build a series of HTML pages to describe it.
 
 
-Implementation
---------------
+Pub Data
+--------
 
-The website will have two purposes:
+There are several sites out there which contain lists of pubs, and
+reviews of them.  However I'm interested in tracking what they look
+like.
 
-* First to display things.
-* Secondly to make the data available.
+Specifically pubs change hands pretty regularly, they change owner,
+change name, and change theme.  I'd love to see a historical archive
+of all the names a pub had, all the guises it traded under.
 
-The data for each venue will include:
+The idea of a map-presentation is just a useful sidetrack, with an
+aim to present things more easily, the ultimate goal is to collect
+data on pubs:
 
-* The name.
-* The location (lattitude+longditude).
-* The contact details.
-* A series of photographs.
+* The names of pubs.
+* The location - lat/long.
+* Images of pubs.
+* Contact details are nice, as are website links.
 
-While reviews are nice over time they tend towards "1 star" or "5 star"
-and I'm just going to stop the hassle.
 
+How can you help?
+-----------------
+
+You can help by submitting new pub-details.   You can see existing
+data in the `data/` sub-directory.
+
+If you have matching photographs please ensure they are 450px high.
 
 
 References
