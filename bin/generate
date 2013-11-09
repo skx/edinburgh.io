@@ -247,10 +247,9 @@ venue.tmpl:
   <!DOCTYPE html>
   <html>
   <head>
-
+  <title>Edinburgh Pubs: <!-- tmpl_var name='name' --></title>
   <script src="/js/jquery.min.js"></script>
   <script src="/js/portfolio.pack.min.js"></script>
-
   <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false">
   </script>
   <script>
