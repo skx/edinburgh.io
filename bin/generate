@@ -22,8 +22,9 @@ use HTML::Template;
 #  Variables.
 #
 my %CONFIG;
-$CONFIG{ 'input' }  = "./data";
-$CONFIG{ 'output' } = "./htdocs";
+$CONFIG{ 'input' }   = "./data";
+$CONFIG{ 'output' }  = "./htdocs";
+$CONFIG{ 'verbose' } = 1;
 
 
 
@@ -33,18 +34,17 @@ $CONFIG{ 'output' } = "./htdocs";
 my %DATA;
 
 #
+#  Find all the files.
 #
-#
+$CONFIG{ 'verbose' } && print "Finding files beneath: $CONFIG{'input'}\n";
 find( { wanted => \&process, no_chdir => 1 }, $CONFIG{ 'input' } );
-
-#
-#
-#
 
 sub process
 {
     my ($file) = $File::Find::name;
     return unless ( $file =~ /\.xml$/ );
+
+    $CONFIG{ 'verbose' } && print "Parsing: $file\n";
 
     open( my $data, "<", $file ) or
       die "Failed to read $file - $!";
@@ -61,7 +61,7 @@ sub process
 
 
 #
-#  Now process
+#  Now process each venue.
 #
 foreach my $venue ( keys %DATA )
 {
@@ -69,10 +69,10 @@ foreach my $venue ( keys %DATA )
     #
     #  Load the template
     #
-    my @html = loadTemplate("venue.tmpl");
+    my @venue = loadTemplate("venue.tmpl");
 
     my $template =
-      HTML::Template->new( arrayref          => \@html,
+      HTML::Template->new( arrayref          => \@venue,
                            die_on_bad_params => 0 );
 
     my $lat  = $DATA{ $venue }{ 'latitude' }   || die "No latitude";
@@ -86,16 +86,86 @@ foreach my $venue ( keys %DATA )
     #
     #  Output.
     #
-    if ( ! -d $CONFIG{'output'} . "/pub" )
+    if ( !-d $CONFIG{ 'output' } . "/pubs" )
     {
-        mkpath( $CONFIG{'output'} . "/pub", { verbose => 0 } );
+        mkpath( $CONFIG{ 'output' } . "/pubs", { verbose => 0 } );
     }
 
-    open( OUTPUT, ">", $CONFIG{ 'output' } . "/pub/" . $sname );
+    open( OUTPUT, ">", $CONFIG{ 'output' } . "/pubs/" . $sname );
     print OUTPUT $template->output();
     close(OUTPUT);
 }
 
+
+#
+#  Process each letter.
+#
+my $letters;
+
+foreach my $letter ( 'a' ... 'z' )
+{
+    my $loop = undef;
+
+    #
+    # Look for venues with that name.
+    #
+    foreach my $tmp ( keys %DATA )
+    {
+        my $name = $DATA{ $tmp }{ 'name' };
+        $name =~ s/^the //gi;
+        my $beg = substr( $name, 0, 1 );
+        $beg = lc($beg);
+
+        if ( $beg eq $letter )
+        {
+            push( @$loop, $DATA{ $tmp } );
+        }
+    }
+
+
+    my $count = undef;
+    $count = 1 if ($loop);
+    push( @$letters,
+          {  letter => $letter,
+             count  => $count
+          } );
+
+    my @letter = loadTemplate("letter.tmpl");
+
+    my $template =
+      HTML::Template->new( arrayref          => \@letter,
+                           die_on_bad_params => 0 );
+
+    $template->param( loop => $loop ) if ($loop);
+    $template->param( letter => $letter );
+
+    #
+    #  Open.
+    #
+    if ( !-d $CONFIG{ 'output' } . "/a-z/$letter/" )
+    {
+        mkpath( $CONFIG{ 'output' } . "/a-z/$letter/", { verbose => 0 } );
+    }
+
+    open( my $handle, ">", "$CONFIG{'output'}/a-z/$letter/index.html" ) or
+      die "Failed to open: $!";
+    print $handle $template->output();
+    close($handle);
+
+}
+
+#
+#  Now the a-z
+#
+my @az = loadTemplate("a-z.tmpl");
+
+my $template = HTML::Template->new( arrayref          => \@az,
+                                    die_on_bad_params => 0 );
+
+$template->param( letters => $letters );
+open( my $handle, ">", "$CONFIG{'output'}/a-z/index.html" );
+print $handle $template->output();
+close($handle);
 
 
 =begin doc
@@ -179,3 +249,35 @@ venue.tmpl:
   <div id="googleMap" style="width:500px;height:380px;"></div>
   </body>
   </html>
+letter.tmpl:
+  <html>
+   <head>
+    <title>Pubs beginning with <!-- tmpl_var name='letter' --></title>
+  </head>
+  <body>
+   <h2>Pubs beginning with <!-- tmpl_var name='letter' --></h2>
+   <ul>
+   <!-- tmpl_loop name='loop' -->
+   <li><a href="/pubs/<!-- tmpl_var name='sname' -->.html"><!-- tmpl_var name='name' --></a></li>
+   <!-- /tmpl_loop -->
+   </ul>
+  </body>
+  </html>
+a-z.tmpl:
+  <html>
+   <head>
+    <title>Edinburgh A-Z of Pubs</title>
+  </head>
+  <body>
+   <h2>Edinburgh A-Z of Pubs</h2>
+
+  <ul>
+  <!-- tmpl_loop name='letters' -->
+    <!-- tmpl_if name='count' -->
+      <li><a href="/a-z/<!-- tmpl_var name='letter' -->/"><!-- tmpl_var name='letter' --></a></li>
+    <!-- tmpl_else -->
+      <li><!-- tmpl_var name='letter' --></li>
+    <!-- /tmpl_if -->
+  <!-- /tmpl_loop -->
+  </ul>
+
