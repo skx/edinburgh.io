@@ -3,6 +3,8 @@
 #  To script to read ./data/*.xml and generate a series of static
 # html-files.
 #
+#  The code is a little ropy, but will be improved.
+#
 # Steve
 # --
 
@@ -17,7 +19,7 @@ use HTML::Template;
 
 
 #
-#  Variables.
+#  Configuration variables.
 #
 my %CONFIG;
 $CONFIG{ 'input' }   = "./data";
@@ -25,18 +27,50 @@ $CONFIG{ 'output' }  = "./htdocs";
 $CONFIG{ 'verbose' } = 1;
 
 
-
 #
-#  Find all data
+#  The data for all our pubs.
 #
 my %DATA;
 
 #
-#  Find all the files.
+#  Find all the XML files for our pubs.
+#
+#  Build into an (inefficient) data-structure.
 #
 $CONFIG{ 'verbose' } && print "Finding files beneath: $CONFIG{'input'}\n";
 find( { wanted => \&process, no_chdir => 1 }, $CONFIG{ 'input' } );
 
+#
+#  Create a single page for each venue.
+#
+#  TODO: We need some way of marking venues as having been renamed
+#
+#   e.g.  The current "leith beer co" is the old "waterline".
+#
+createVenues();
+
+
+#
+#  Create the A-Z & letter-pages
+#
+createA2Z();
+
+
+#
+#  Create index page + .txt
+#
+createIndex();
+
+#
+#  All done
+#
+exit(0);
+
+
+
+#
+# Process *.xml.
+#
 sub process
 {
     my ($file) = $File::Find::name;
@@ -59,163 +93,187 @@ sub process
 
 
 #
-#  Now process each venue.
+#  Create one page for each venue.
 #
-foreach my $venue ( keys %DATA )
+sub createVenues
 {
 
     #
-    #  Load the template
+    #  Now process each venue.
     #
-    my @venue = loadTemplate("venue.tmpl");
-
-    my $template =
-      HTML::Template->new( arrayref          => \@venue,
-                           die_on_bad_params => 0 );
-
-    #
-    #  The images for this pub
-    #
-    my $images = undef;
-    my $sname  = $DATA{ $venue }{ 'sname' };
-    foreach my $img ( sort( glob("images/$sname*") ) )
+    foreach my $venue ( keys %DATA )
     {
-        push( @$images, { path => $img } );
-    }
 
-    $sname .= ".html";
+        #
+        #  Load the template
+        #
+        my @venue = loadTemplate("venue.tmpl");
 
-    my $name = $DATA{ $venue }{ 'name' };
-    $name =~ s/^the //gi;
-    my $beg = substr( $name, 0, 1 );
-    $beg = lc($beg);
+        my $template =
+          HTML::Template->new( arrayref          => \@venue,
+                               die_on_bad_params => 0 );
 
-    $template->param( $DATA{ $venue } );
-    $template->param( letter => $beg );
+        #
+        #  The images for this pub
+        #
+        my $images = undef;
+        my $sname  = $DATA{ $venue }{ 'sname' };
+        foreach my $img ( sort( glob("images/$sname*") ) )
+        {
+            push( @$images, { path => $img } );
+        }
 
-    if ($images)
-    {
-        $template->param( images => $images, has_images => 1 );
-    }
-    else
-    {
-        print "$sname missing images\n";
-    }
+        $sname .= ".html";
 
-    #
-    #  Output.
-    #
-    if ( !-d $CONFIG{ 'output' } . "/pubs" )
-    {
-        mkpath( $CONFIG{ 'output' } . "/pubs", { verbose => 0 } );
-    }
-
-    open( OUTPUT, ">", $CONFIG{ 'output' } . "/pubs/" . $sname );
-    print OUTPUT $template->output();
-    close(OUTPUT);
-}
-
-
-#
-#  Process each letter.
-#
-my $letters;
-
-foreach my $letter ( 'a' ... 'z' )
-{
-    my $loop = undef;
-
-    #
-    # Look for venues with that name.
-    #
-    foreach my $tmp ( keys %DATA )
-    {
-        my $name = $DATA{ $tmp }{ 'name' };
+        my $name = $DATA{ $venue }{ 'name' };
         $name =~ s/^the //gi;
         my $beg = substr( $name, 0, 1 );
         $beg = lc($beg);
 
-        if ( $beg eq $letter )
+        $template->param( $DATA{ $venue } );
+        $template->param( letter => $beg );
+
+        if ($images)
         {
-            push( @$loop, $DATA{ $tmp } );
+            $template->param( images => $images, has_images => 1 );
         }
+        else
+        {
+            print "WARNING: $sname missing images\n";
+        }
+
+        #
+        #  Output.
+        #
+        if ( !-d $CONFIG{ 'output' } . "/pubs" )
+        {
+            mkpath( $CONFIG{ 'output' } . "/pubs", { verbose => 0 } );
+        }
+
+        open( OUTPUT, ">", $CONFIG{ 'output' } . "/pubs/" . $sname );
+        print OUTPUT $template->output();
+        close(OUTPUT);
     }
 
+}
 
-    my $count = undef;
-    $count = 1 if ($loop);
-    push( @$letters,
-          {  letter => $letter,
-             count  => $count
-          } );
 
-    my @letter = loadTemplate("letter.tmpl");
-
-    my $template =
-      HTML::Template->new( arrayref          => \@letter,
-                           die_on_bad_params => 0 );
-
-    $template->param( loop => $loop ) if ($loop);
-    $template->param( letter => $letter );
+#
+#  Create a-z
+#
+sub createA2Z
+{
 
     #
-    #  Open.
+    #  Process each letter.
     #
-    if ( !-d $CONFIG{ 'output' } . "/a-z/$letter/" )
+    my $letters;
+
+    foreach my $letter ( 'a' ... 'z' )
     {
-        mkpath( $CONFIG{ 'output' } . "/a-z/$letter/", { verbose => 0 } );
+        my $loop = undef;
+
+        #
+        # Look for venues with that name.
+        #
+        foreach my $tmp ( keys %DATA )
+        {
+            my $name = $DATA{ $tmp }{ 'name' };
+            $name =~ s/^the //gi;
+            my $beg = substr( $name, 0, 1 );
+            $beg = lc($beg);
+
+            if ( $beg eq $letter )
+            {
+                push( @$loop, $DATA{ $tmp } );
+            }
+        }
+
+
+        my $count = undef;
+        $count = 1 if ($loop);
+        push( @$letters,
+              {  letter => $letter,
+                 count  => $count
+              } );
+
+        my @letter = loadTemplate("letter.tmpl");
+
+        my $template =
+          HTML::Template->new( arrayref          => \@letter,
+                               die_on_bad_params => 0 );
+
+        $template->param( loop => $loop ) if ($loop);
+        $template->param( letter => $letter );
+
+        #
+        #  Open.
+        #
+        if ( !-d $CONFIG{ 'output' } . "/pubs/a-z/$letter/" )
+        {
+            mkpath( $CONFIG{ 'output' } . "/pubs/a-z/$letter/", { verbose => 0 } );
+        }
+
+        open( my $handle, ">", "$CONFIG{'output'}/pubs/a-z/$letter/index.html" ) or
+          die "Failed to open: $!";
+        print $handle $template->output();
+        close($handle);
+
     }
 
-    open( my $handle, ">", "$CONFIG{'output'}/a-z/$letter/index.html" ) or
-      die "Failed to open: $!";
+    #
+    #  Now the a-z
+    #
+    my @az = loadTemplate("a-z.tmpl");
+    my $template = HTML::Template->new( arrayref          => \@az,
+                                        die_on_bad_params => 0 );
+
+    $template->param( letters => $letters );
+    open( my $handle, ">", "$CONFIG{'output'}/pubs/a-z/index.html" );
     print $handle $template->output();
     close($handle);
 
 }
 
-#
-#  Now the a-z
-#
-my @az = loadTemplate("a-z.tmpl");
-my $template = HTML::Template->new( arrayref          => \@az,
-                                    die_on_bad_params => 0 );
 
-$template->param( letters => $letters );
-open( my $handle, ">", "$CONFIG{'output'}/a-z/index.html" );
-print $handle $template->output();
-close($handle);
-
-
-
-#
-#  Finally output the XML file.
-#
-my @txt = loadTemplate("index.txt.tmpl");
-$template = HTML::Template->new( arrayref          => \@txt,
-                                 die_on_bad_params => 0 );
-
-my $xml;
-foreach my $key ( sort {lc$DATA{$a}{'name'} cmp lc$DATA{$b}{'name'}} keys %DATA )
+sub createIndex
 {
-    push( @$xml, $DATA{ $key } );
+
+    #
+    #  Finally output the XML file.
+    #
+    my @txt = loadTemplate("index.txt.tmpl");
+    my $template = HTML::Template->new( arrayref          => \@txt,
+                                        die_on_bad_params => 0 );
+
+    my $xml;
+    foreach my $key (
+        sort {
+            lc $DATA{ $a }{ 'name' } cmp lc $DATA{ $b }{ 'name' }
+        } keys %DATA
+      )
+    {
+        push( @$xml, $DATA{ $key } );
+    }
+    $template->param( xml => $xml );
+    open( my $xhandle, ">", "$CONFIG{'output'}/pubs/index.txt" );
+    print $xhandle $template->output();
+    close($xhandle);
+
+
+
+    #
+    #  Here.
+    #
+    my @ind = loadTemplate("index.html.tmpl");
+    $template = HTML::Template->new( arrayref          => \@ind,
+                                     die_on_bad_params => 0 );
+    $template->param( coords => $xml );
+    open( my $ihandle, ">", "$CONFIG{'output'}/pubs/index.html" );
+    print $ihandle $template->output();
+    close($ihandle);
+
 }
-$template->param( xml => $xml );
-open( my $xhandle, ">", "$CONFIG{'output'}/pubs/index.txt" );
-print $xhandle $template->output();
-close($xhandle);
-
-
-
-#
-#  Here.
-#
-my @ind = loadTemplate("index.html.tmpl");
-$template = HTML::Template->new( arrayref          => \@ind,
-                                 die_on_bad_params => 0 );
-$template->param( coords => $xml );
-open( my $ihandle, ">", "$CONFIG{'output'}/pubs/index.html" );
-print $ihandle $template->output();
-close($ihandle);
 
 
 =begin doc
@@ -303,7 +361,7 @@ venue.tmpl:
   </script>
   </head>
   <body>
-  <h1><a href="/a-z/">A-Z</a> &gt; <a href="/a-z/<!-- tmpl_var name='letter' -->/"><!-- tmpl_var name='letter' --></a> &gt; <!-- tmpl_var name='name' --></h1>
+  <h1><a href="/pubs/a-z/">A-Z</a> &gt; <a href="/a-z/<!-- tmpl_var name='letter' -->/"><!-- tmpl_var name='letter' --></a> &gt; <!-- tmpl_var name='name' --></h1>
   <blockquote>
   <!-- tmpl_var name='address' -->
   <!-- tmpl_if name='telephone' -->
@@ -355,7 +413,7 @@ a-z.tmpl:
   </head>
   <body>
    <h1>Edinburgh A-Z of Pubs</h1>
-  <ul>
+  <ul style="list-style:none;">
   <!-- tmpl_loop name='letters' -->
     <!-- tmpl_if name='count' -->
       <li><a href="/a-z/<!-- tmpl_var name='letter' -->/"><!-- tmpl_var name='letter' --></a></li>
