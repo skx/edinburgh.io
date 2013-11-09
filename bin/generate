@@ -248,10 +248,10 @@ venue.tmpl:
   <html>
   <head>
   <title>Edinburgh Pubs: <!-- tmpl_var name='name' --></title>
+  <link href="/css/style.css" rel="stylesheet" media="all">
   <script src="/js/jquery.min.js"></script>
   <script src="/js/portfolio.pack.min.js"></script>
-  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false">
-  </script>
+  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false"></script>
   <script>
   var myCenter=new google.maps.LatLng(<!-- tmpl_var name='latitude' -->,<!-- tmpl_var name='longditude' -->);
   function initialize()
@@ -274,14 +274,14 @@ venue.tmpl:
   </script>
   </head>
   <body>
-  <h2><a href="/a-z/">A-Z</a> &gt; <a href="/a-z/<!-- tmpl_var name='letter' -->/"><!-- tmpl_var name='letter' --></a> &gt; <!-- tmpl_var name='name' --></h2>
+  <h1><a href="/a-z/">A-Z</a> &gt; <a href="/a-z/<!-- tmpl_var name='letter' -->/"><!-- tmpl_var name='letter' --></a> &gt; <!-- tmpl_var name='name' --></h1>
   <blockquote>
   <!-- tmpl_var name='address' -->
   <!-- tmpl_if name='telephone' -->
    <p>Telephone: <!-- tmpl_var name='telephone' --></p>
   <!-- /tmpl_if -->
   <!-- tmpl_if name='website' -->
-   <p>Website: <!-- tmpl_var name='website' --></p>
+   <p>Website: <a href="<!-- tmpl_var name='website' -->"><!-- tmpl_var name='website' --></a></p>
   <!-- /tmpl_if -->
   </blockquote>
 
@@ -297,7 +297,7 @@ venue.tmpl:
   <!-- /tmpl_if name='images' -->
   <h2>Map</h2>
   <blockquote>
-  <div id="googleMap" style="width:500px;height:380px;"></div>
+  <div id="googleMap" style="text-align:center;width:500px;height:380px;"></div>
   </blockquote>
   </body>
   </html>
@@ -305,9 +305,10 @@ letter.tmpl:
   <html>
    <head>
     <title>Pubs beginning with <!-- tmpl_var name='letter' --></title>
+    <link href="/css/style.css" rel="stylesheet" media="all">
   </head>
   <body>
-   <h2>Pubs beginning with <!-- tmpl_var name='letter' --></h2>
+   <h1>Pubs beginning with <!-- tmpl_var name='letter' --></h1>
    <ul>
    <!-- tmpl_loop name='loop' -->
    <li><a href="/pubs/<!-- tmpl_var name='sname' -->.html"><!-- tmpl_var name='name' --></a></li>
@@ -319,10 +320,10 @@ a-z.tmpl:
   <html>
    <head>
     <title>Edinburgh A-Z of Pubs</title>
+    <link href="/css/style.css" rel="stylesheet" media="all">
   </head>
   <body>
-   <h2>Edinburgh A-Z of Pubs</h2>
-
+   <h1>Edinburgh A-Z of Pubs</h1>
   <ul>
   <!-- tmpl_loop name='letters' -->
     <!-- tmpl_if name='count' -->
