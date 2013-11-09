@@ -13,6 +13,7 @@ use strict;
 use warnings;
 
 use File::Find;
+use File::Path qw/ mkpath /;
 use HTML::Template;
 
 
@@ -85,6 +86,10 @@ foreach my $venue ( keys %DATA )
     #
     #  Output.
     #
+    if ( ! -d $CONFIG{'output'} . "/pub" )
+    {
+        mkpath( $CONFIG{'output'} . "/pub", { verbose => 0 } );
+    }
 
     open( OUTPUT, ">", $CONFIG{ 'output' } . "/pub/" . $sname );
     print OUTPUT $template->output();
