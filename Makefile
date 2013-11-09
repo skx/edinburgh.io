@@ -13,4 +13,4 @@ clean:
 	mkdir htdocs
 
 rsync:
-	rsync -vazr ./htdocs/ s-io@www.steve.org.uk:htdocs/
+	rsync --delete -vazr ./htdocs/ s-io@www.steve.org.uk:htdocs/
