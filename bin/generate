@@ -420,7 +420,7 @@ a-z.tmpl:
   <ul style="list-style:none;">
   <!-- tmpl_loop name='letters' -->
     <!-- tmpl_if name='count' -->
-      <li><a href="/a-z/<!-- tmpl_var name='letter' -->/"><!-- tmpl_var name='letter' --></a></li>
+      <li><a href="/pubs/a-z/<!-- tmpl_var name='letter' -->/"><!-- tmpl_var name='letter' --></a></li>
     <!-- tmpl_else -->
       <li><!-- tmpl_var name='letter' --></li>
     <!-- /tmpl_if -->
