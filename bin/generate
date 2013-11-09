@@ -361,7 +361,8 @@ venue.tmpl:
   </script>
   </head>
   <body>
-  <h1><a href="/pubs/a-z/">A-Z</a> &gt; <a href="/a-z/<!-- tmpl_var name='letter' -->/"><!-- tmpl_var name='letter' --></a> &gt; <!-- tmpl_var name='name' --></h1>
+  <h1><a href="http://edinburgh.io/pubs/">Edinburgh Pubs</a> - <!-- tmpl_var name='name' --></h1>
+  <h2>Summary</h2>
   <blockquote>
   <!-- tmpl_var name='address' -->
   <!-- tmpl_if name='telephone' -->
@@ -371,7 +372,6 @@ venue.tmpl:
    <p>Website: <a href="<!-- tmpl_var name='website' -->"><!-- tmpl_var name='website' --></a></p>
   <!-- /tmpl_if -->
   </blockquote>
-
   <!-- tmpl_if name='has_images' -->
   <h2>Images</h2>
   <blockquote>
@@ -383,10 +383,12 @@ venue.tmpl:
   </blockquote>
   <!-- /tmpl_if name='images' -->
   <h2>Map</h2>
-  <blockquote>
   <div style="text-align:center;width:100%;">
   <div id="googleMap" style="display:inline-block;width:500px;height:380px;"></div>
   </div>
+  <h2>History</h2>
+  <blockquote>
+  <p>TODO.</p>
   </blockquote>
   </body>
   </html>
@@ -494,7 +496,7 @@ index.html.tmpl:
   </script>
   </head>
   <body>
-  <h1>Edinburgh Pubs</h1>
+  <h1><a href="http://edinburgh.io/pubs/">Edinburgh Pubs</a></h1>
   <div style="text-align:center;width:100%;">
   <div id="googleMap" style="display:inline-block;width:80%;height:450px;"></div>
   </div>
