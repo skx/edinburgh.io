@@ -190,17 +190,17 @@ close($handle);
 #
 #  Finally output the XML file.
 #
-my @xml = loadTemplate("xml.tmpl");
-$template = HTML::Template->new( arrayref          => \@xml,
+my @txt = loadTemplate("index.txt.tmpl");
+$template = HTML::Template->new( arrayref          => \@txt,
                                  die_on_bad_params => 0 );
 
 my $xml;
-foreach my $key ( sort keys %DATA )
+foreach my $key ( sort {lc$DATA{$a}{'name'} cmp lc$DATA{$b}{'name'}} keys %DATA )
 {
     push( @$xml, $DATA{ $key } );
 }
 $template->param( xml => $xml );
-open( my $xhandle, ">", "$CONFIG{'output'}/pubs/index.xml" );
+open( my $xhandle, ">", "$CONFIG{'output'}/pubs/index.txt" );
 print $xhandle $template->output();
 close($xhandle);
 
@@ -209,7 +209,7 @@ close($xhandle);
 #
 #  Here.
 #
-my @ind = loadTemplate("index.tmpl");
+my @ind = loadTemplate("index.html.tmpl");
 $template = HTML::Template->new( arrayref          => \@ind,
                                  die_on_bad_params => 0 );
 $template->param( coords => $xml );
@@ -326,7 +326,9 @@ venue.tmpl:
   <!-- /tmpl_if name='images' -->
   <h2>Map</h2>
   <blockquote>
-  <div id="googleMap" style="text-align:center;width:500px;height:380px;"></div>
+  <div style="text-align:center;width:100%;">
+  <div id="googleMap" style="display:inline-block;width:500px;height:380px;"></div>
+  </div>
   </blockquote>
   </body>
   </html>
@@ -362,7 +364,7 @@ a-z.tmpl:
     <!-- /tmpl_if -->
   <!-- /tmpl_loop -->
   </ul>
-xml.tmpl:
+index.txt.tmpl:
   <!-- tmpl_loop name='xml' -->
   <pub>
   <name><!-- tmpl_var name='name' --></name>
@@ -372,7 +374,7 @@ xml.tmpl:
   <website><!-- tmpl_var name='website' --></website>
   </pub>
   <!-- /tmpl_loop -->
-index.tmpl:
+index.html.tmpl:
   <!DOCTYPE html>
   <html>
   <head>
@@ -434,9 +436,10 @@ index.tmpl:
   </script>
   </head>
   <body>
-  <h1>Pubs</h1>
-  <blockquote>
-  <div id="googleMap" style="text-align:center;width:80%;height:450px;"></div>
-  </blockquote>
+  <h1>Edinburgh Pubs</h1>
+  <div style="text-align:center;width:100%;">
+  <div id="googleMap" style="display:inline-block;width:80%;height:450px;"></div>
+  </div>
+  <p style="text-align:right;"><small>Data generated from <a href="index.txt">simple meta-data</a>, which is open to collaboration <a href="https://github.com/skx/edinburgh.io/">on github</a>.</small></p>
   </body>
   </html>
