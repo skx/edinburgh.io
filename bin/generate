@@ -206,6 +206,17 @@ close($xhandle);
 
 
 
+#
+#  Here.
+#
+my @ind   = loadTemplate( "index.tmpl" );
+$template = HTML::Template->new( arrayref          => \@ind,
+                                 die_on_bad_params => 0 );
+$template->param( coords => $xml );
+open( my $ihandle, ">", "$CONFIG{'output'}/pubs/index.html" );
+print $ihandle $template->output();
+close($ihandle);
+
 
 =begin doc
 
@@ -361,3 +372,71 @@ xml.tmpl:
   <website><!-- tmpl_var name='website' --></website>
   </pub>
   <!-- /tmpl_loop -->
+index.tmpl:
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>Edinburgh Pubs</title>
+  <link href="/css/style.css" rel="stylesheet" media="all">
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/portfolio.pack.min.js"></script>
+  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false"></script>
+  <script>
+  var infowindow;
+  (function () {
+    google.maps.Map.prototype.markers = new Array();
+     google.maps.Map.prototype.addMarker = function(marker) {
+     this.markers[this.markers.length] = marker;
+    };
+    google.maps.Map.prototype.getMarkers = function() {
+     return this.markers
+    };
+    google.maps.Map.prototype.clearMarkers = function() {
+    if(infowindow) {
+      infowindow.close();
+    }
+    for(var i=0; i<this.markers.length; i++){
+      this.markers[i].set_map(null);
+    }
+  };
+  })();
+  function createMarker(map,latlng,name,link) {
+    var marker = new google.maps.Marker({position: latlng, map: map});
+    google.maps.event.addListener(marker, "click", function() {
+      if (infowindow) infowindow.close();
+      infowindow = new google.maps.InfoWindow({content: "<div><p><a href=\"" + link + "\">" + name + "</a></p></div>" });
+      infowindow.open(map, marker);
+    });
+    return marker;
+  }
+  var myCenter=new google.maps.LatLng(55.97561,-3.17024);
+  function initialize()
+  {
+  var mapProp = { center:myCenter, zoom:14, mapTypeId:google.maps.MapTypeId.ROADMAP  };
+  var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+  var coords = [
+  <!-- tmpl_loop name='coords' -->
+  [<!-- tmpl_var name='latitude' -->,<!-- tmpl_var name='longditude' -->,"<!-- tmpl_var name='name' -->", "/pubs/<!-- tmpl_var name='sname' -->.html"],
+  <!-- /tmpl_loop -->
+  ];
+
+  // iterate over your coords array
+  for (var i = 0; i < coords.length; i++) {
+        // create a closure for your latitude/longitude pair
+        (function(coord) {
+            // set the location...
+            var latLng = new google.maps.LatLng(coord[0], coord[1]);
+            map.addMarker(createMarker(map,latLng,coord[2],coord[3]));
+        })(coords[i]);
+    };
+  }
+  google.maps.event.addDomListener(window, 'load', initialize);
+  </script>
+  </head>
+  <body>
+  <h1>Pubs</h1>
+  <blockquote>
+  <div id="googleMap" style="text-align:center;width:80%;height:450px;"></div>
+  </blockquote>
+  </body>
+  </html>
