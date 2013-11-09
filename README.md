@@ -1,11 +1,9 @@
 edinburgh.io
 ============
 
-This repository will build the website located at
-http://edinburgh.io/
+This repository will build the website located at http://edinburgh.io/
 
-The website will contain a list of pubs, along with
-contact details, photographs, & etc.
+The website will contain a list of pubs, along with contact details, photographs, & etc.
 
 
 Implementation
@@ -19,7 +17,7 @@ The website will have two purposes:
 The data for each venue will include:
 
 * The name.
-* The location (lattitude+longdituded).
+* The location (lattitude+longditude).
 * The contact details.
 * A series of photographs.
 
@@ -32,4 +30,7 @@ References
 -----------
 
 * Finding lat/long:  http://universimmedia.pagesperso-orange.fr/geo/loc.htm
-* 
+
+
+Steve
+--
