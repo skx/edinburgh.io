@@ -211,10 +211,12 @@ sub createA2Z
         #
         if ( !-d $CONFIG{ 'output' } . "/pubs/a-z/$letter/" )
         {
-            mkpath( $CONFIG{ 'output' } . "/pubs/a-z/$letter/", { verbose => 0 } );
+            mkpath( $CONFIG{ 'output' } . "/pubs/a-z/$letter/",
+                    { verbose => 0 } );
         }
 
-        open( my $handle, ">", "$CONFIG{'output'}/pubs/a-z/$letter/index.html" ) or
+        open( my $handle, ">", "$CONFIG{'output'}/pubs/a-z/$letter/index.html" )
+          or
           die "Failed to open: $!";
         print $handle $template->output();
         close($handle);
