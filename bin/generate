@@ -1,0 +1,176 @@
+#!/usr/bin/perl
+#
+#  To script to read ./data/*.xml and generate a series of static
+# html-files.
+#
+#  TODO: Make indexes, handle images, etc.
+#
+#
+
+
+
+use strict;
+use warnings;
+
+use File::Find;
+use HTML::Template;
+
+
+
+#
+#  Variables.
+#
+my %CONFIG;
+$CONFIG{ 'input' }  = "./data";
+$CONFIG{ 'output' } = "./htdocs";
+
+
+
+#
+#  Find all data
+#
+my %DATA;
+
+#
+#
+#
+find( { wanted => \&process, no_chdir => 1 }, $CONFIG{ 'input' } );
+
+#
+#
+#
+
+sub process
+{
+    my ($file) = $File::Find::name;
+    return unless ( $file =~ /\.xml$/ );
+
+    open( my $data, "<", $file ) or
+      die "Failed to read $file - $!";
+    foreach my $line (<$data>)
+    {
+        chomp($line);
+        if ( $line =~ /^\s+<([^>]+)>(.*)<\/[^>]+>$/ )
+        {
+            $DATA{ $file }{ $1 } = $2;
+        }
+    }
+    close($data);
+}
+
+
+#
+#  Now process
+#
+foreach my $venue ( keys %DATA )
+{
+
+    #
+    #  Load the template
+    #
+    my @html = loadTemplate("venue.tmpl");
+
+    my $template =
+      HTML::Template->new( arrayref          => \@html,
+                           die_on_bad_params => 0 );
+
+    my $lat  = $DATA{ $venue }{ 'latitude' }   || die "No latitude";
+    my $long = $DATA{ $venue }{ 'longditude' } || die "No longditude";
+    my $name = $DATA{ $venue }{ 'name' }       || die "No name";
+    my $sname = $DATA{ $venue }{ 'sname' };
+    $sname .= ".html";
+
+    $template->param( lat => $lat, long => $long, name => $name );
+
+    #
+    #  Output.
+    #
+
+    open( OUTPUT, ">", $CONFIG{ 'output' } . "/pub/" . $sname );
+    print OUTPUT $template->output();
+    close(OUTPUT);
+}
+
+
+
+=begin doc
+
+Load a "file" from beneath the "__DATA__" section.
+
+This resets the DATA handle to allow re-reading more than once, if
+necessary, and only works because the __DATA__ section is formatted
+as follows:
+
+=for example begin
+
+filename:
+  DATA - prefixed by two spaces.
+  DATA
+filename2:
+  DATA - prefixed by two spaces.
+  ..
+
+=for example end
+
+=cut
+
+sub loadTemplate
+{
+    my ($file) = (@_);
+
+    # save the position
+    my $data_pos = tell DATA;
+
+    my %hash;
+    my $filename = undef;
+
+    while ( my $line = <DATA> )
+    {
+        chomp($line);
+        if ( $line =~ /^  (.*)/ )
+        {
+            $hash{ $filename } .= $1 . "\n";
+        }
+        elsif ( $line =~ /^(.*):$/ )
+        {
+            $filename = $1;
+        }
+    }
+
+    # reset
+    seek DATA, $data_pos, 0;
+
+    my $content = $hash{ $file } || undef;
+    die "File not found in __DATA__ seciont: $file"
+      if ( !$content );
+    return ($content);
+}
+
+__DATA__
+venue.tmpl:
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false">
+  </script>
+  <script>
+  var myCenter=new google.maps.LatLng(<!-- tmpl_var name='lat' -->,<!-- tmpl_var name='long' -->);
+  function initialize()
+  {
+    var mapProp = { center:myCenter, zoom:14, mapTypeId:google.maps.MapTypeId.ROADMAP  };
+  var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+  var marker=new google.maps.Marker({ position:myCenter  });
+  marker.setMap(map);
+  var infowindow = new google.maps.InfoWindow({
+     content:"<!-- tmpl_var name='name' -->"  });
+  infowindow.open(map,marker);
+  }
+  google.maps.event.addDomListener(window, 'load', initialize);
+  </script>
+  </head>
+  <body>
+  <h2><!-- tmpl_var name='name' --></h2>
+  <p>TODO:  Address, photos,etc.</p>
+  <div id="googleMap" style="width:500px;height:380px;"></div>
+  </body>
+  </html>
