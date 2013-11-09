@@ -1,0 +1,10 @@
+body {
+    background-color: white;
+    color: black;
+}
+h1 {
+    text-align: center;
+}
+h2 {
+    border-bottom: 1px solid grey;
+}
