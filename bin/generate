@@ -614,6 +614,6 @@ index.html.tmpl:
        </div>
       </td></tr></table>
   </div>
-  <p style="text-align:right;"><small>This site is generated from <a href="index.txt">simple meta-data</a>, which is open to collaboration <a href="https://github.com/skx/edinburgh.io/">on github</a>.</small></p>
+  <p style="text-align:right;"><small>This site is generated from <a href="/data/">simple meta-data</a>, which is open to collaboration <a href="https://github.com/skx/edinburgh.io/">on github</a>.</small></p>
   </body>
   </html>
