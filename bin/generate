@@ -57,9 +57,16 @@ createA2Z();
 
 
 #
-#  Create index page + .txt
+#  Create index page.
 #
 createIndex();
+
+
+#
+#  Create teh data page
+#
+createDataPage();
+
 
 #
 #  All done
@@ -238,16 +245,11 @@ sub createA2Z
 }
 
 
+#
+#  Create the index-page with all the points.
+#
 sub createIndex
 {
-
-    #
-    #  Finally output the XML file.
-    #
-    my @txt = loadTemplate("index.txt.tmpl");
-    my $template = HTML::Template->new( arrayref          => \@txt,
-                                        die_on_bad_params => 0 );
-
     my $xml;
     foreach my $key (
         sort {
@@ -257,19 +259,13 @@ sub createIndex
     {
         push( @$xml, $DATA{ $key } );
     }
-    $template->param( xml => $xml );
-    open( my $xhandle, ">", "$CONFIG{'output'}/pubs/index.txt" );
-    print $xhandle $template->output();
-    close($xhandle);
-
-
 
     #
     #  Here.
     #
     my @ind = loadTemplate("index.html.tmpl");
-    $template = HTML::Template->new( arrayref          => \@ind,
-                                     die_on_bad_params => 0 );
+    my $template = HTML::Template->new( arrayref          => \@ind,
+                                        die_on_bad_params => 0 );
     $template->param( coords => $xml );
     open( my $ihandle, ">", "$CONFIG{'output'}/pubs/index.html" );
     print $ihandle $template->output();
@@ -277,6 +273,59 @@ sub createIndex
 
 }
 
+
+
+#
+#  Create:
+#
+#     /data/pubs.xml
+#     /data/pubs.json
+#
+sub createDataPage
+{
+    my $data;
+    foreach my $key (
+        sort {
+            lc $DATA{ $a }{ 'name' } cmp lc $DATA{ $b }{ 'name' }
+        } keys %DATA
+      )
+    {
+        push( @$data, $DATA{ $key } );
+    }
+
+    #
+    #  Convert to JSON and output
+    #
+    if ( !-d $CONFIG{ 'output' } . "/data" )
+    {
+        mkpath( $CONFIG{ 'output' } . "/data", { verbose => 0 } );
+    }
+
+    #
+    # Output JSON
+    #
+    use JSON;
+    my $x = encode_json($data);
+    open( my $handle, ">", "$CONFIG{'output'}/data/pubs.json" );
+    print $handle $x;
+    close($handle);
+
+    #
+    # Output text
+    #
+    my @txt = loadTemplate("index.txt.tmpl");
+    my $template = HTML::Template->new( arrayref          => \@txt,
+                                        die_on_bad_params => 0 );
+
+    $template->param( xml => $data );
+    open( my $xhandle,  ">", "$CONFIG{'output'}/data/pubs.xml" );
+    open( my $xthandle, ">", "$CONFIG{'output'}/data/pubs.xml.txt" );
+    print $xhandle $template->output();
+    print $xthandle $template->output();
+    close($xhandle);
+    close($xthandle);
+
+}
 
 =begin doc
 
