@@ -338,6 +338,7 @@ venue.tmpl:
   <head>
   <title>Edinburgh Pubs: <!-- tmpl_var name='name' --></title>
   <link href="/css/style.css" rel="stylesheet" media="all">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
   <script src="/js/jquery.min.js"></script>
   <script src="/js/portfolio.pack.min.js"></script>
   <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false"></script>
@@ -399,6 +400,7 @@ letter.tmpl:
    <head>
     <title>Pubs beginning with <!-- tmpl_var name='letter' --></title>
     <link href="/css/style.css" rel="stylesheet" media="all">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
   </head>
   <body>
    <h1>Pubs beginning with <!-- tmpl_var name='letter' --></h1>
@@ -414,6 +416,7 @@ a-z.tmpl:
    <head>
     <title>Edinburgh A-Z of Pubs</title>
     <link href="/css/style.css" rel="stylesheet" media="all">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
   </head>
   <body>
    <h1>Edinburgh A-Z of Pubs</h1>
@@ -442,6 +445,7 @@ index.html.tmpl:
   <head>
   <title>Edinburgh Pubs</title>
   <link href="/css/style.css" rel="stylesheet" media="all">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
   <script src="/js/jquery.min.js"></script>
   <script src="/js/portfolio.pack.min.js"></script>
   <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false"></script>
