@@ -438,6 +438,7 @@ venue.tmpl:
   <!-- tmpl_if name='website' -->
    <p>Website: <a href="<!-- tmpl_var name='website' -->"><!-- tmpl_var name='website' --></a></p>
   <!-- /tmpl_if -->
+  <p>GPS: <a href="/pubs/#lat=<!-- tmpl_var name='latitude' -->,long=<!-- tmpl_var name='longitude' -->"><!-- tmpl_var name='latitude' -->,<!-- tmpl_var name='longitude' --></a></p>
   </blockquote>
   <!-- tmpl_if name='has_images' -->
   <h2>Images</h2>
@@ -583,9 +584,19 @@ index.html.tmpl:
     return marker;
   }
   var myCenter=new google.maps.LatLng(55.97561,-3.17024);
+  var zoom = 13;
   function initialize()
   {
-  var mapProp = { center:myCenter, zoom:13, mapTypeId:google.maps.MapTypeId.ROADMAP  };
+    if(window.location.hash) {
+      var r = /^#lat=([0-9.]+),long=(.*)$/;
+      var m = r.exec( window.location.hash );
+      if ( m )
+      {
+         myCenter=new google.maps.LatLng( m[1], m[2] );
+         zoom = 17;
+      }
+  }
+  var mapProp = { center:myCenter, zoom:zoom, mapTypeId:google.maps.MapTypeId.ROADMAP  };
   var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
   var coords = [
   <!-- tmpl_loop name='coords' -->
