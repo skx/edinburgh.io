@@ -466,7 +466,7 @@ index.html.tmpl:
   var myCenter=new google.maps.LatLng(55.97561,-3.17024);
   function initialize()
   {
-  var mapProp = { center:myCenter, zoom:14, mapTypeId:google.maps.MapTypeId.ROADMAP  };
+  var mapProp = { center:myCenter, zoom:13, mapTypeId:google.maps.MapTypeId.ROADMAP  };
   var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
   var coords = [
   <!-- tmpl_loop name='coords' -->
