@@ -175,6 +175,8 @@ sub createA2Z
     #  Process each letter.
     #
     my $letters;
+    my $index;
+
 
     foreach my $letter ( 'a' ... 'z' )
     {
@@ -195,6 +197,20 @@ sub createA2Z
                 push( @$loop, $DATA{ $tmp } );
             }
         }
+
+
+        if ($loop)
+        {
+            push( @$index,
+                  {  letter  => $letter,
+                     entries => $loop
+                  } );
+        }
+        else
+        {
+            push( @$index, { letter => $letter, } );
+        }
+
 
 
         my $count = undef;
@@ -237,7 +253,7 @@ sub createA2Z
     my $template = HTML::Template->new( arrayref          => \@az,
                                         die_on_bad_params => 0 );
 
-    $template->param( letters => $letters );
+    $template->param( index => $index );
     open( my $handle, ">", "$CONFIG{'output'}/pubs/a-z/index.html" );
     print $handle $template->output();
     close($handle);
@@ -496,15 +512,25 @@ a-z.tmpl:
   <div id="main">
   <p>&nbsp;</p>
    <h1>Edinburgh A-Z of Pubs</h1>
-  <ul style="list-style:none;">
-  <!-- tmpl_loop name='letters' -->
-    <!-- tmpl_if name='count' -->
-      <li><a href="/pubs/a-z/<!-- tmpl_var name='letter' -->/"><!-- tmpl_var name='letter' --></a></li>
-    <!-- tmpl_else -->
-      <li><!-- tmpl_var name='letter' --></li>
+    <blockquote><blockquote>
+  <dl>
+  <!-- tmpl_loop name='index' -->
+     <!-- tmpl_if name='entries' -->
+      <dt style="border-bottom: 1px solid grey; width:80%;"><a href="/pubs/a-z/<!-- tmpl_var name='letter' -->/"><!-- tmpl_var name='letter' --></a></dt>
+      <dd>
+      <ul style="list-style:none;">
+      <!-- tmpl_loop name='entries' -->
+      <li><a href="/pubs/<!-- tmpl_var name='sname' -->.html"><!-- tmpl_var name='name' --></a></li>
+      <!-- /tmpl_loop name='entries' -->
+      </ul>
+      </dd>
+     <!-- tmpl_else -->
+      <dt><!-- tmpl_var name='letter' --></dt>
+      <dd><p>No pubs added yet, please <a href="/faq/">contribute</a>.</p>
     <!-- /tmpl_if -->
   <!-- /tmpl_loop -->
-  </ul>
+  </dl>
+    </blockquote></blockquote>
   </div></body></html>
 index.txt.tmpl:
   <!-- tmpl_loop name='xml' -->
