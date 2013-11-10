@@ -350,7 +350,19 @@ venue.tmpl:
   </script>
   </head>
   <body>
-  <h1><a href="http://edinburgh.io/pubs/">Edinburgh Pubs</a> - <!-- tmpl_var name='name' --></h1>
+   <div id="page">
+      <div id="header">
+        <h3><span style="font-size:40px"><a href="/">Edinburgh.io</a></span> - The definitive Edinburgh Pub List.</h3>
+      </div>
+     <div id="navigation">
+     <ul>
+      <li><a href="/contact/">Contact</a></li>
+      <li><a href="/pubs/a-z/">A-Z</a></li>
+      <li><a href="/pubs/">Home</a></li>
+     </ul>
+     </div>
+  <div id="main">
+  <p>&nbsp;</p><h1><!-- tmpl_var name='name' --></h1>
   <h2>Summary</h2>
   <blockquote>
   <!-- tmpl_var name='address' -->
@@ -375,6 +387,7 @@ venue.tmpl:
   <blockquote>
   <p>TODO.</p>
   </blockquote>
+  </div>
   </body>
   </html>
 letter.tmpl:
@@ -386,12 +399,26 @@ letter.tmpl:
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
   </head>
   <body>
+   <div id="page">
+      <div id="header">
+        <h3><span style="font-size:40px"><a href="/">Edinburgh.io</a></span> - The definitive Edinburgh Pub List.</h3>
+      </div>
+     <div id="navigation">
+     <ul>
+      <li><a href="/contact/">Contact</a></li>
+      <li><a href="/pubs/a-z/">A-Z</a></li>
+      <li><a href="/pubs/">Home</a></li>
+     </ul>
+     </div>
+  <div id="main">
+  <p>&nbsp;</p>
    <h1>Pubs beginning with <!-- tmpl_var name='letter' --></h1>
    <ul>
    <!-- tmpl_loop name='loop' -->
    <li><a href="/pubs/<!-- tmpl_var name='sname' -->.html"><!-- tmpl_var name='name' --></a></li>
    <!-- /tmpl_loop -->
    </ul>
+   </div>
   </body>
   </html>
 a-z.tmpl:
@@ -403,6 +430,19 @@ a-z.tmpl:
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
   </head>
   <body>
+   <div id="page">
+      <div id="header">
+        <h3><span style="font-size:40px"><a href="/">Edinburgh.io</a></span> - The definitive Edinburgh Pub List.</h3>
+      </div>
+     <div id="navigation">
+     <ul>
+      <li><a href="/contact/">Contact</a></li>
+      <li id="selected"><a href="/pubs/a-z/">A-Z</a></li>
+      <li><a href="/pubs/">Home</a></li>
+     </ul>
+     </div>
+  <div id="main">
+  <p>&nbsp;</p>
    <h1>Edinburgh A-Z of Pubs</h1>
   <ul style="list-style:none;">
   <!-- tmpl_loop name='letters' -->
@@ -413,6 +453,7 @@ a-z.tmpl:
     <!-- /tmpl_if -->
   <!-- /tmpl_loop -->
   </ul>
+  </div></body></html>
 index.txt.tmpl:
   <!-- tmpl_loop name='xml' -->
   <pub>
@@ -496,7 +537,20 @@ index.html.tmpl:
   js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1";
   fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));</script>
-  <h1><a href="http://edinburgh.io/pubs/">Edinburgh Pubs</a></h1>
+
+   <div id="page">
+      <div id="header">
+        <h3><span style="font-size:40px"><a href="/">Edinburgh.io</a></span> - The definitive Edinburgh Pub List.</h3>
+      </div>
+     <div id="navigation">
+     <ul>
+      <li><a href="/contact/">Contact</a></li>
+      <li><a href="/pubs/a-z/">A-Z</a></li>
+      <li id="selected"><a href="/pubs/">Home</a></li>
+     </ul>
+     </div>
+  <div id="main">
+  <p>&nbsp;</p>
   <table width="100%">
   <tr><td width="180" valign="top">
   <div class="fb-like-box" data-href="http://www.facebook.com/edinburgh.io" data-height="250" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false"></div>
@@ -506,7 +560,7 @@ index.html.tmpl:
        <div id="googleMap" style="display:inline-block;width:90%;height:450px;"></div>
        </div>
       </td></tr></table>
-
+  </div>
   <p style="text-align:right;"><small>This site is generated from <a href="index.txt">simple meta-data</a>, which is open to collaboration <a href="https://github.com/skx/edinburgh.io/">on github</a>.</small></p>
   </body>
   </html>

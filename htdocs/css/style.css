@@ -8,3 +8,147 @@ h1 {
 h2 {
     border-bottom: 1px solid grey;
 }
+
+
+body
+{
+    background-color:#DCDCDC;
+    font-family:Liberation Sans, DejaVu Sans, Nimbus Sans, Verdana, Arial, Trebuchet MS, sans-serif;
+    margin:0px;
+    padding:12px 12px 12px 12px;
+
+    color:black;
+}
+
+dt
+{
+    font-weight: bold;
+}
+
+a:link, a:visited
+{
+    text-decoration:none;
+    color:#FF4500;
+}
+
+a:active, a:hover
+{
+    text-decoration:underline;
+    color:#FF4500;
+    background-color:#ddff95;
+}
+
+h2, h3
+{
+    color:black;
+    margin:0px 20px 20px 0px;
+    padding:0px;
+	padding-top:20px;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+h2
+{
+    font-size:20px;
+}
+
+h3
+{
+    font-size:16px;
+}
+
+#page
+{
+    border:1px solid #a4a4a4;
+    background-color:#ffffff;
+    color: black;;
+    font-size: 14px;
+    padding:0px;
+    margin:0px;
+}
+
+#header
+{
+    margin:0px;
+    padding:10px;
+}
+
+
+#footer
+{
+    border:4px solid #a4a4a4;
+    background-color:#ffffff;
+    color: black;;
+    font-size: 12px;
+    padding:5px;
+    margin:0px;
+}
+
+#navigation ul
+{
+    list-style-type:none;
+    float:left;
+    display:block;
+    width:100%;
+    clear:both;
+    margin:0px 0px 10px 0px;
+    padding:0px;
+    background-color:#DCDCDC;
+color:red;
+    border-top:1px solid #000000;
+    border-bottom:1px solid #000000;
+}
+
+#navigation ul li
+{
+    display:inline;
+}
+
+#navigation a
+{
+    display:block;
+    float:right;
+    width:100px;
+    padding:10px 0px 10px 0px;
+    margin:0px;
+    text-decoration:none;
+    text-align:center;
+}
+
+#navigation a:visited, #navigation a:link
+{
+//    background-color:#575757;
+    background-color:#DCDCDC;
+//    color:#ffffff;
+color:red;}
+
+#navigation li#selected a:visited, #navigation li#selected a:link
+{
+    background-color:#f9f9f5;
+    border-left:1px solid #000000;
+    border-right:1px solid #000000;
+    color:#000000;
+}
+
+#navigation a:active, #navigation a:hover
+{
+    background-color:#ddff95;
+    color:#000000;
+}
+
+#main
+{
+    margin:0px 10px 0px 10px;
+}
+
+hr {
+    color:#e4e4e4;
+}
+
+
+pre {
+	padding: 2px;
+	border: 1px solid black;
+	background-color: silver;
+}
