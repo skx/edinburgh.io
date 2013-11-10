@@ -508,9 +508,19 @@ index.html.tmpl:
   </script>
   </head>
   <body>
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
   <h1><a href="http://edinburgh.io/pubs/">Edinburgh Pubs</a></h1>
   <table width="100%">
-  <tr><td width="180" valign="top"><p>&nbsp;</p></td>
+  <tr><td width="180" valign="top">
+  <div class="fb-like-box" data-href="http://www.facebook.com/edinburgh.io" data-height="250" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false"></div>
+</td>
       <td valign="top">
        <div style="text-align:center;width:100%;">
        <div id="googleMap" style="display:inline-block;width:90%;height:450px;"></div>
