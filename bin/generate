@@ -358,7 +358,8 @@ venue.tmpl:
   </script>
   <script type="text/javascript">
     $(document).ready(function() {
-            var p = $("#gallery").portfolio();
+            var p = $("#gallery").portfolio({
+               enableKeyboardNavigation: true, loop: true});
             p.init();
     });
   </script>
@@ -503,9 +504,14 @@ index.html.tmpl:
   </head>
   <body>
   <h1><a href="http://edinburgh.io/pubs/">Edinburgh Pubs</a></h1>
-  <div style="text-align:center;width:100%;">
-  <div id="googleMap" style="display:inline-block;width:80%;height:450px;"></div>
-  </div>
+  <table width="100%">
+  <tr><td width="180" valign="top"><p>&nbsp;</p></td>
+      <td valign="top">
+       <div style="text-align:center;width:100%;">
+       <div id="googleMap" style="display:inline-block;width:90%;height:450px;"></div>
+       </div>
+      </td></tr></table>
+
   <p style="text-align:right;"><small>Data generated from <a href="index.txt">simple meta-data</a>, which is open to collaboration <a href="https://github.com/skx/edinburgh.io/">on github</a>.</small></p>
   </body>
   </html>
