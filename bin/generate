@@ -657,7 +657,8 @@ index.html.tmpl:
        <div id="googleMap" style="display:inline-block;width:90%;height:450px;"></div>
        </div>
       </td></tr></table>
-  </div>
   <p style="text-align:right;"><small>This site is generated from <a href="/data/">simple meta-data</a>, which is open to collaboration <a href="https://github.com/skx/edinburgh.io/">on github</a>.</small></p>
+  </div>
+  </div>
   </body>
   </html>
