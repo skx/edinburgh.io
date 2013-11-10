@@ -338,12 +338,13 @@ venue.tmpl:
   <head>
   <title>Edinburgh Pubs: <!-- tmpl_var name='name' --></title>
   <link href="/css/style.css" rel="stylesheet" media="all">
+  <link type="text/plain" rel="author" href="/humans.txt" />
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
   <script src="/js/jquery.min.js"></script>
   <script src="/js/portfolio.pack.min.js"></script>
   <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false"></script>
   <script>
-  var myCenter=new google.maps.LatLng(<!-- tmpl_var name='latitude' -->,<!-- tmpl_var name='longditude' -->);
+  var myCenter=new google.maps.LatLng(<!-- tmpl_var name='latitude' -->,<!-- tmpl_var name='longitude' -->);
   function initialize()
   {
     var mapProp = { center:myCenter, zoom:14, mapTypeId:google.maps.MapTypeId.ROADMAP  };
@@ -401,6 +402,7 @@ letter.tmpl:
    <head>
     <title>Pubs beginning with <!-- tmpl_var name='letter' --></title>
     <link href="/css/style.css" rel="stylesheet" media="all">
+    <link type="text/plain" rel="author" href="/humans.txt" />
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
   </head>
   <body>
@@ -417,6 +419,7 @@ a-z.tmpl:
    <head>
     <title>Edinburgh A-Z of Pubs</title>
     <link href="/css/style.css" rel="stylesheet" media="all">
+    <link type="text/plain" rel="author" href="/humans.txt" />
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
   </head>
   <body>
@@ -436,8 +439,9 @@ index.txt.tmpl:
   <name><!-- tmpl_var name='name' --></name>
   <address><!-- tmpl_var name='address' --></address>
   <latitude><!-- tmpl_var name='latitude' --></latitude>
-  <longditude><!-- tmpl_var name='longditude' --></longditude>
+  <longitude><!-- tmpl_var name='longitude' --></longitude>
   <website><!-- tmpl_var name='website' --></website>
+  <telephone><!-- tmpl_var name='telephone' --></telephone>
   </pub>
   <!-- /tmpl_loop -->
 index.html.tmpl:
@@ -446,6 +450,7 @@ index.html.tmpl:
   <head>
   <title>Edinburgh Pubs</title>
   <link href="/css/style.css" rel="stylesheet" media="all">
+  <link type="text/plain" rel="author" href="/humans.txt" />
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
   <script src="/js/jquery.min.js"></script>
   <script src="/js/portfolio.pack.min.js"></script>
@@ -485,7 +490,7 @@ index.html.tmpl:
   var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
   var coords = [
   <!-- tmpl_loop name='coords' -->
-  [<!-- tmpl_var name='latitude' -->,<!-- tmpl_var name='longditude' -->,"<!-- tmpl_var name='name' -->", "/pubs/<!-- tmpl_var name='sname' -->.html"],
+  [<!-- tmpl_var name='latitude' -->,<!-- tmpl_var name='longitude' -->,"<!-- tmpl_var name='name' -->", "/pubs/<!-- tmpl_var name='sname' -->.html"],
   <!-- /tmpl_loop -->
   ];
 

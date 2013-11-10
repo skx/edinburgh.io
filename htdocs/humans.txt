@@ -1,0 +1,7 @@
+/* Author */
+Name:Steve Kemp
+Contact:steve<at>steve.org.uk
+Link:http://steve.org.uk/
+
+/* Contributors */
+
