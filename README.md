@@ -48,7 +48,6 @@ To submit a new pub you need to do two things:
     * The images should be 450px high.
     * The image should be named following the short-name attribute of the data file.
     * Again the existing images beneath `images/` should make this obvious, but if you need help [get in touch](http://steve.org.uk/contact).
-data in the `data/` sub-directory.
 
 
 Useful Links
