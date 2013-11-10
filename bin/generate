@@ -357,6 +357,7 @@ venue.tmpl:
      <div id="navigation">
      <ul>
       <li><a href="/contact/">Contact</a></li>
+      <li><a href="/faq/">FAQ</a></li>
       <li><a href="/pubs/a-z/">A-Z</a></li>
       <li><a href="/pubs/">Home</a></li>
      </ul>
@@ -406,6 +407,7 @@ letter.tmpl:
      <div id="navigation">
      <ul>
       <li><a href="/contact/">Contact</a></li>
+      <li><a href="/faq/">FAQ</a></li>
       <li><a href="/pubs/a-z/">A-Z</a></li>
       <li><a href="/pubs/">Home</a></li>
      </ul>
@@ -437,6 +439,7 @@ a-z.tmpl:
      <div id="navigation">
      <ul>
       <li><a href="/contact/">Contact</a></li>
+      <li><a href="/faq/">FAQ</a></li>
       <li id="selected"><a href="/pubs/a-z/">A-Z</a></li>
       <li><a href="/pubs/">Home</a></li>
      </ul>
@@ -545,6 +548,7 @@ index.html.tmpl:
      <div id="navigation">
      <ul>
       <li><a href="/contact/">Contact</a></li>
+      <li><a href="/faq/">FAQ</a></li>
       <li><a href="/pubs/a-z/">A-Z</a></li>
       <li id="selected"><a href="/pubs/">Home</a></li>
      </ul>
