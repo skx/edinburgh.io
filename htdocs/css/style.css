@@ -1,3 +1,9 @@
+/**
+ * This layout is nasty.
+ *
+ * Improvements would be most welcome.
+ */
+
 body {
     background-color: white;
     color: black;
@@ -23,8 +29,14 @@ body
 dt
 {
     font-weight: bold;
+    border-bottom: 1px solid black;
+    width:75%;
 }
 
+dd {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
 a:link, a:visited
 {
     text-decoration:none;
