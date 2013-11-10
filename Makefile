@@ -7,8 +7,7 @@ build:
 	@rsync -qazr ./css    htdocs/
 
 clean:
-	rm -rf htdocs/
-	mkdir htdocs
+	@rm -rf htdocs/pubs/ || true
 
 steve: clean build
 	rsync --delete -qazr ./htdocs/ s-io@www.steve.org.uk:htdocs/
