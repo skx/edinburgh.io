@@ -58,8 +58,8 @@ Useful Links
    * http://universimmedia.pagesperso-orange.fr/geo/loc.htm
 * The live version of the generated site:
    * http://edinburgh.io/pubs/
-* The meta-data for the live site:
-   * http://edinburgh.io/pubs/index.txt
+* The meta-data for the live site, in different formats:
+   * http://edinburgh.io/data/
 * The gallery-script for images.
    * http://portfoliojs.com/
 
