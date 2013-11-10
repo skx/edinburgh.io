@@ -404,6 +404,7 @@ venue.tmpl:
   <title>Edinburgh Pubs: <!-- tmpl_var name='name' --></title>
   <link href="/css/style.css" rel="stylesheet" media="all">
   <link type="text/plain" rel="author" href="/humans.txt" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script src="/js/portfolio.pack.min.js"></script>
@@ -458,12 +459,14 @@ venue.tmpl:
   </body>
   </html>
 letter.tmpl:
+  <!DOCTYPE html>
   <html>
    <head>
     <title>Pubs beginning with <!-- tmpl_var name='letter' --></title>
     <link href="/css/style.css" rel="stylesheet" media="all">
     <link type="text/plain" rel="author" href="/humans.txt" />
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   </head>
   <body>
    <div id="page">
@@ -487,15 +490,18 @@ letter.tmpl:
    <!-- /tmpl_loop -->
    </ul>
    </div>
+   </div>
   </body>
   </html>
 a-z.tmpl:
+  <!DOCTYPE html>
   <html>
    <head>
     <title>Edinburgh A-Z of Pubs</title>
-    <link href="/css/style.css" rel="stylesheet" media="all">
+    <link href="/css/style.css" rel="stylesheet" media="all" />
     <link type="text/plain" rel="author" href="/humans.txt" />
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   </head>
   <body>
    <div id="page">
@@ -532,7 +538,7 @@ a-z.tmpl:
   <!-- /tmpl_loop -->
   </dl>
     </blockquote></blockquote>
-  </div></body></html>
+  </div></div></body></html>
 index.txt.tmpl:
   <!-- tmpl_loop name='xml' -->
   <pub>
@@ -549,9 +555,10 @@ index.html.tmpl:
   <html>
   <head>
   <title>Edinburgh Pubs</title>
-  <link href="/css/style.css" rel="stylesheet" media="all">
+  <link href="/css/style.css" rel="stylesheet" media="all" />
   <link type="text/plain" rel="author" href="/humans.txt" />
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <script src="/js/jquery.min.js"></script>
   <script src="/js/portfolio.pack.min.js"></script>
   <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false"></script>
