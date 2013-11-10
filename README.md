@@ -13,10 +13,10 @@ Pub Data
 
 There are several sites out there which contain lists of pubs, and
 reviews of them.  However I'm more interested in tracking what they look
-like - not lease because most reviews will be on of:
+like - not least because most pub reviews tend to be:
 
-* This pub was awful, avoid.
-* This pub was great.
+* This pub was _awful_, avoid.
+* This pub was _great_.
 
 
 It is a sad fact that pubs change hands pretty regularly, they change owner,
