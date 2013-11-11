@@ -266,23 +266,13 @@ sub createA2Z
 #
 sub createIndex
 {
-    my $xml;
-    foreach my $key (
-        sort {
-            lc $DATA{ $a }{ 'name' } cmp lc $DATA{ $b }{ 'name' }
-        } keys %DATA
-      )
-    {
-        push( @$xml, $DATA{ $key } );
-    }
 
     #
-    #  Here.
+    #  The index: NOTE - DOESN'T NEED TO BE A TEMPLATE ANY MORE.
     #
     my @ind = loadTemplate("index.html.tmpl");
     my $template = HTML::Template->new( arrayref          => \@ind,
                                         die_on_bad_params => 0 );
-    $template->param( coords => $xml );
     open( my $ihandle, ">", "$CONFIG{'output'}/pubs/index.html" );
     print $ihandle $template->output();
     close($ihandle);
@@ -565,69 +555,11 @@ index.html.tmpl:
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <script src="/js/jquery.min.js"></script>
-  <script src="/js/portfolio.pack.min.js"></script>
-  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false"></script>
-  <script>
-  var infowindow;
-  (function () {
-    google.maps.Map.prototype.markers = new Array();
-     google.maps.Map.prototype.addMarker = function(marker) {
-     this.markers[this.markers.length] = marker;
-    };
-    google.maps.Map.prototype.getMarkers = function() {
-     return this.markers
-    };
-    google.maps.Map.prototype.clearMarkers = function() {
-    if(infowindow) {
-      infowindow.close();
-    }
-    for(var i=0; i<this.markers.length; i++){
-      this.markers[i].set_map(null);
-    }
-  };
-  })();
-  function createMarker(map,latlng,name,link) {
-    var marker = new google.maps.Marker({position: latlng, map: map});
-    google.maps.event.addListener(marker, "click", function() {
-      if (infowindow) infowindow.close();
-      infowindow = new google.maps.InfoWindow({content: "<div><p><a href=\"" + link + "\">" + name + "</a></p></div>" });
-      infowindow.open(map, marker);
-    });
-    return marker;
-  }
-  var myCenter=new google.maps.LatLng(55.97561,-3.17024);
-  var zoom = 13;
-  function initialize()
-  {
-    if(window.location.hash) {
-      var r = /^#lat=([0-9.]+),long=(.*)$/;
-      var m = r.exec( window.location.hash );
-      if ( m )
-      {
-         myCenter=new google.maps.LatLng( m[1], m[2] );
-         zoom = 17;
-      }
-  }
-  var mapProp = { center:myCenter, zoom:zoom, mapTypeId:google.maps.MapTypeId.ROADMAP  };
-  var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-  var coords = [
-  <!-- tmpl_loop name='coords' -->
-  [<!-- tmpl_var name='latitude' -->,<!-- tmpl_var name='longitude' -->,"<!-- tmpl_var name='name' -->", "/pubs/<!-- tmpl_var name='sname' -->.html"],
-  <!-- /tmpl_loop -->
-  ];
+  <link rel="stylesheet" href="/js/leaflet-0.6.4/leaflet.css" />
+  <script src="/js/leaflet-0.6.4/leaflet.js"></script>
 
-  // iterate over your coords array
-  for (var i = 0; i < coords.length; i++) {
-        // create a closure for your latitude/longitude pair
-        (function(coord) {
-            // set the location...
-            var latLng = new google.maps.LatLng(coord[0], coord[1]);
-            map.addMarker(createMarker(map,latLng,coord[2],coord[3]));
-        })(coords[i]);
-    };
-  }
-  google.maps.event.addDomListener(window, 'load', initialize);
-  </script>
+  <link rel="stylesheet" href="/js/leaflet-control-osm-geocoder/Control.OSMGeocoder.css" />
+  <script src="/js/leaflet-control-osm-geocoder/Control.OSMGeocoder.js"></script>
   </head>
   <body>
   <div id="fb-root"></div>
@@ -658,11 +590,50 @@ index.html.tmpl:
   <div class="fb-like-box" data-href="http://www.facebook.com/edinburgh.io" data-height="250" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false"></div></td>
       <td>
        <div style="text-align:center;width:100%;">
-       <div id="googleMap" style="display:inline-block;width:90%;height:450px;"></div>
+       <div id="map" style="display:inline-block;width:90%;height:450px;"></div>
        </div>
       </td></tr></table>
   <p style="text-align:right;"><small>This site is generated from <a href="/data/">simple meta-data</a>, which is open to collaboration <a href="https://github.com/skx/edinburgh.io/">on github</a>.</small></p>
   </div>
   </div>
+  <script>
+     // create a map in the "map" div, set the view to a given place and zoom
+     var map = L.map('map').setView([55.97561,-3.17024], 13);
+     var osmGeocoder = new L.Control.OSMGeocoder();
+     map.addControl(osmGeocoder);
+     // add an OpenStreetMap tile layer
+     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>; contributors'}).addTo(map);
+
+     if(window.location.hash) {
+      var r = /^#lat=([0-9.]+),long=(.*)$/;
+      var m = r.exec( window.location.hash );
+      if ( m ) {
+         map.setView( [ m[1], m[2] ], 15);
+      }
+     }
+
+   //
+   // Add the markers to the map, via a JSON AJAX call.
+   //
+   $.getJSON( "/data/pubs.json", function( data ) {
+      $.each( data, function( obj, f ) {
+         var lon = f["longitude"];
+         var lat = f["latitude"];
+         var name= f["name"];
+         var link= f["link"];
+         L.marker([ lat, lon ]).addTo(map).bindPopup('<a href="' + link + '">' +  name + '</a>' );
+      });
+    });
+
+    var popup = L.popup();
+    function onMapClick(e) {
+      popup
+      .setLatLng(e.latlng)
+      .setContent("You clicked the map at " + e.latlng.toString())
+      .openOn(map);
+    }
+   map.on('click', onMapClick);
+  </script>
+
   </body>
   </html>
