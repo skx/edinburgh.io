@@ -164,3 +164,11 @@ pre {
 	border: 1px solid black;
 	background-color: silver;
 }
+
+td
+{
+   vertical-align: top;
+}
+table {
+    width: 100%;
+}
