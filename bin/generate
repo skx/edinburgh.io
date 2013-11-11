@@ -306,8 +306,9 @@ sub createDataPage
         } keys %DATA
       )
     {
-        my $d = $DATA{$key};
-        $d->{"link"} = "http://edinburgh.io/pubs/" . $d->{'sname'} . ".html";
+        my $d = $DATA{ $key };
+        $d->{ "link" } =
+          "http://edinburgh.io/pubs/" . $d->{ 'sname' } . ".html";
         push( @$data, $d );
     }
 
