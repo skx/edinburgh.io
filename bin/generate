@@ -57,13 +57,7 @@ createA2Z();
 
 
 #
-#  Create index page.
-#
-createIndex();
-
-
-#
-#  Create teh data page
+#  Create the data page
 #
 createDataPage();
 
@@ -259,26 +253,6 @@ sub createA2Z
     close($handle);
 
 }
-
-
-#
-#  Create the index-page with all the points.
-#
-sub createIndex
-{
-
-    #
-    #  The index: NOTE - DOESN'T NEED TO BE A TEMPLATE ANY MORE.
-    #
-    my @ind = loadTemplate("index.html.tmpl");
-    my $template = HTML::Template->new( arrayref          => \@ind,
-                                        die_on_bad_params => 0 );
-    open( my $ihandle, ">", "$CONFIG{'output'}/pubs/index.html" );
-    print $ihandle $template->output();
-    close($ihandle);
-
-}
-
 
 
 #
@@ -545,95 +519,3 @@ index.txt.tmpl:
   <telephone><!-- tmpl_var name='telephone' --></telephone>
   </pub>
   <!-- /tmpl_loop -->
-index.html.tmpl:
-  <!DOCTYPE html>
-  <html>
-  <head>
-  <title>Edinburgh Pubs</title>
-  <link href="/css/style.css" rel="stylesheet" media="all" />
-  <link type="text/plain" rel="author" href="/humans.txt" />
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script src="/js/jquery.min.js"></script>
-  <link rel="stylesheet" href="/js/leaflet-0.6.4/leaflet.css" />
-  <script src="/js/leaflet-0.6.4/leaflet.js"></script>
-
-  <link rel="stylesheet" href="/js/leaflet-control-osm-geocoder/Control.OSMGeocoder.css" />
-  <script src="/js/leaflet-control-osm-geocoder/Control.OSMGeocoder.js"></script>
-  </head>
-  <body>
-  <div id="fb-root"></div>
-  <script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));</script>
-
-   <div id="page">
-      <div id="header">
-        <h3><span style="font-size:40px"><a href="/">Edinburgh.io</a></span> - The definitive Edinburgh Pub List.</h3>
-      </div>
-     <div id="navigation">
-     <ul>
-      <li><a href="/contact/">Contact</a></li>
-      <li><a href="/faq/">FAQ</a></li>
-      <li><a href="/pubs/a-z/">A-Z</a></li>
-      <li id="selected"><a href="/pubs/">Home</a></li>
-     </ul>
-     </div>
-  <div id="main">
-  <p>&nbsp;</p>
-  <table>
-  <tr><td id="fb" style="width:180px"><p><small><a href="#" onClick="$('#fb').hide(); return false;">hide</a></small></p>
-  <div class="fb-like-box" data-href="http://www.facebook.com/edinburgh.io" data-height="250" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false"></div></td>
-      <td>
-       <div style="text-align:center;width:100%;">
-       <div id="map" style="display:inline-block;width:90%;height:450px;"></div>
-       </div>
-      </td></tr></table>
-  <p style="text-align:right;"><small>This site is generated from <a href="/data/">simple meta-data</a>, which is open to collaboration <a href="https://github.com/skx/edinburgh.io/">on github</a>.</small></p>
-  </div>
-  </div>
-  <script>
-     // create a map in the "map" div, set the view to a given place and zoom
-     var map = L.map('map').setView([55.97561,-3.17024], 13);
-     var osmGeocoder = new L.Control.OSMGeocoder();
-     map.addControl(osmGeocoder);
-     // add an OpenStreetMap tile layer
-     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>; contributors'}).addTo(map);
-
-     if(window.location.hash) {
-      var r = /^#lat=([0-9.]+),long=(.*)$/;
-      var m = r.exec( window.location.hash );
-      if ( m ) {
-         map.setView( [ m[1], m[2] ], 15);
-      }
-     }
-
-   //
-   // Add the markers to the map, via a JSON AJAX call.
-   //
-   $.getJSON( "/data/pubs.json", function( data ) {
-      $.each( data, function( obj, f ) {
-         var lon = f["longitude"];
-         var lat = f["latitude"];
-         var name= f["name"];
-         var link= f["link"];
-         L.marker([ lat, lon ]).addTo(map).bindPopup('<a href="' + link + '">' +  name + '</a>' );
-      });
-    });
-
-    var popup = L.popup();
-    function onMapClick(e) {
-      popup
-      .setLatLng(e.latlng)
-      .setContent("You clicked the map at " + e.latlng.toString())
-      .openOn(map);
-    }
-   map.on('click', onMapClick);
-  </script>
-
-  </body>
-  </html>
