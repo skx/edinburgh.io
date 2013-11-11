@@ -543,6 +543,8 @@ index.txt.tmpl:
   <!-- tmpl_loop name='xml' -->
   <pub>
   <name><!-- tmpl_var name='name' --></name>
+  <sname><!-- tmpl_var name='sname' --></sname>
+  <link>http://edinburgh.io/pubs/<!-- tmpl_var name='sname' -->.html</link>
   <address><!-- tmpl_var name='address' --></address>
   <latitude><!-- tmpl_var name='latitude' --></latitude>
   <longitude><!-- tmpl_var name='longitude' --></longitude>
