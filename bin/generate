@@ -15,7 +15,7 @@ use warnings;
 use File::Find;
 use File::Path qw/ mkpath /;
 use HTML::Template;
-
+use JSON;
 
 
 #
@@ -127,7 +127,7 @@ sub createVenues
         #
         #  The short-name should have a .html suffix, if it doesn't.
         #
-        $sname .= ".html" unless ( $sname =~ /\.html$/i ) ;
+        $sname .= ".html" unless ( $sname =~ /\.html$/i );
 
         #
         #  Set the data into the template.
@@ -266,6 +266,10 @@ sub createA2Z
 #
 sub createDataPage
 {
+
+    #
+    #  This nasty code is just to sort the pubs by their name.
+    #
     my $data;
     foreach my $key (
         sort {
@@ -273,6 +277,10 @@ sub createDataPage
         } keys %DATA
       )
     {
+
+        #
+        #  We want to link to *our* site, for each pub.
+        #
         my $d = $DATA{ $key };
         $d->{ "link" } =
           "http://edinburgh.io/pubs/" . $d->{ 'sname' } . ".html";
@@ -280,7 +288,7 @@ sub createDataPage
     }
 
     #
-    #  Convert to JSON and output
+    #  Ensure we have the output-directory.
     #
     if ( !-d $CONFIG{ 'output' } . "/data" )
     {
@@ -288,16 +296,14 @@ sub createDataPage
     }
 
     #
-    # Output JSON
+    # Output the JSON version of the data.
     #
-    use JSON;
-    my $x = encode_json($data);
     open( my $handle, ">", "$CONFIG{'output'}/data/pubs.json" );
-    print $handle $x;
+    print $handle encode_json($data);
     close($handle);
 
     #
-    # Output text
+    # Output the "XML" version.  Twice.
     #
     my @txt = loadTemplate("index.txt.tmpl");
     my $template = HTML::Template->new( arrayref          => \@txt,
