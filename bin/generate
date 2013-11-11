@@ -100,15 +100,15 @@ sub createVenues
 {
 
     #
-    #  Now process each venue.
+    #  Load the template page we'll use for the output.
+    #
+    my @venue = loadTemplate("venue.tmpl");
+
+    #
+    #  For each venue.
     #
     foreach my $venue ( keys %DATA )
     {
-
-        #
-        #  Load the template
-        #
-        my @venue = loadTemplate("venue.tmpl");
 
         my $template =
           HTML::Template->new( arrayref          => \@venue,
@@ -124,15 +124,15 @@ sub createVenues
             push( @$images, { path => $img } );
         }
 
-        $sname .= ".html";
+        #
+        #  The short-name should have a .html suffix, if it doesn't.
+        #
+        $sname .= ".html" unless ( $sname =~ /\.html$/i ) ;
 
-        my $name = $DATA{ $venue }{ 'name' };
-        $name =~ s/^the //gi;
-        my $beg = substr( $name, 0, 1 );
-        $beg = lc($beg);
-
+        #
+        #  Set the data into the template.
+        #
         $template->param( $DATA{ $venue } );
-        $template->param( letter => $beg );
 
         if ($images)
         {
@@ -144,13 +144,16 @@ sub createVenues
         }
 
         #
-        #  Output.
+        #  Ensure the output directory exists..
         #
         if ( !-d $CONFIG{ 'output' } . "/pubs" )
         {
             mkpath( $CONFIG{ 'output' } . "/pubs", { verbose => 0 } );
         }
 
+        #
+        #  Write out the output.
+        #
         open( OUTPUT, ">", $CONFIG{ 'output' } . "/pubs/" . $sname );
         print OUTPUT $template->output();
         close(OUTPUT);
