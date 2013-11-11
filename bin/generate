@@ -404,6 +404,16 @@ venue.tmpl:
       <li><a href="/pubs/">Home</a></li>
      </ul>
      </div>
+
+    <!-- This is a "microformat" to describe the data on this page programattically. -->
+    <div id="location" class="vcard" style="display:none;">
+    <div class="adr">
+    <a class="url fn" href="<!-- tmpl_var name='link' -->"><!-- tmpl_var name='name' --></a>
+    <div class="street-address"><!-- tmpl_var name='address' --></div>
+    </div>
+    <div class="tel"><!--tmpl_var name='telephone' --></div>
+    <abbr class="geo" title="<!-- tmpl_var name='latitude' -->;<!-- tmpl_var name='longitude' -->"><!-- tmpl_var name='name' --></abbr>
+    </div>
   <div id="main">
   <p>&nbsp;</p><h1><!-- tmpl_var name='name' --></h1>
   <h2>Summary</h2>
