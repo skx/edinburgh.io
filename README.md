@@ -53,14 +53,16 @@ To submit a new pub you need to do two things:
 Useful Links
 -------------
 
-* Finding lat/long based upon a street adddress:
-   * http://universimmedia.pagesperso-orange.fr/geo/loc.htm
 * The live version of the generated site:
    * http://edinburgh.io/pubs/
 * The meta-data for the live site, in different formats:
    * http://edinburgh.io/data/
-* The gallery-script for images.
+* Finding lat/long based upon a street adddress:
+   * http://universimmedia.pagesperso-orange.fr/geo/loc.htm
+* The gallery-script for images:
    * http://portfoliojs.com/
+* The javascript library for viewing the map provided by OpenStreetMap:
+   * http://leafletjs.com/
 
 
 Steve
