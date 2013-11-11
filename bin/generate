@@ -306,7 +306,9 @@ sub createDataPage
         } keys %DATA
       )
     {
-        push( @$data, $DATA{ $key } );
+        my $d = $DATA{$key};
+        $d->{"link"} = "http://edinburgh.io/pubs/" . $d->{'sname'} . ".html";
+        push( @$data, $d );
     }
 
     #
@@ -544,7 +546,7 @@ index.txt.tmpl:
   <pub>
   <name><!-- tmpl_var name='name' --></name>
   <sname><!-- tmpl_var name='sname' --></sname>
-  <link>http://edinburgh.io/pubs/<!-- tmpl_var name='sname' -->.html</link>
+  <link><!-- tmpl_var name='link' --></link>
   <address><!-- tmpl_var name='address' --></address>
   <latitude><!-- tmpl_var name='latitude' --></latitude>
   <longitude><!-- tmpl_var name='longitude' --></longitude>
