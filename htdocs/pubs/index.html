@@ -7,6 +7,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.cookie.js"></script>
     <link rel="stylesheet" href="/js/leaflet-0.6.4/leaflet.css" />
     <script src="/js/leaflet-0.6.4/leaflet.js"></script>
     <link rel="stylesheet" href="/js/leaflet-control-osm-geocoder/Control.OSMGeocoder.css" />
@@ -49,43 +50,79 @@
       </div>
     </div>
     <script>
+      //
+      // If we have a location/zoom-level stored in cookies use them.
+      //
+      var la = $.cookie('lat')  || 55.97561;
+      var lo = $.cookie('long') || -3.17024;
+      var zo = $.cookie('zoom') || 13;
+
+      //
+      // Otherwise we'll read from the window-hash, if present.
+      //
+      if (window.location.hash) {
+        var r = /^#lat=([0-9.]+),long=(.*)$/;
+        var m = r.exec( window.location.hash );
+        if ( m ) {
+          la = m[1];
+          lo = m[2];
+          zo = 16;   // zoom because we've chosen a lat/long via hashtag
+        }
+      }
+
+      //
       // create a map in the "map" div, set the view to a given place and zoom
-      var map = L.map('map').setView([55.97561,-3.17024], 13);
+      //
+      var map = L.map('map').setView([la,lo], zo);
+
+      //
+      // Add the find/search plugin.
+      //
       var osmGeocoder = new L.Control.OSMGeocoder();
       map.addControl(osmGeocoder);
+
+      //
       // add an OpenStreetMap tile layer
+      //
       L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>; contributors'}).addTo(map);
 
-      if(window.location.hash) {
-      var r = /^#lat=([0-9.]+),long=(.*)$/;
-      var m = r.exec( window.location.hash );
-      if ( m ) {
-      map.setView( [ m[1], m[2] ], 15);
-      }
-     }
-
       //
-      // Add the markers to the map, via a JSON AJAX call.
+      // Add all the pubs to the map, via an AJAX/JSON call.
       //
       $.getJSON( "/data/pubs.json", function( data ) {
-      $.each( data, function( obj, f ) {
-      var lon = f["longitude"];
-      var lat = f["latitude"];
-      var name= f["name"];
-      var link= f["link"];
-      L.marker([ lat, lon ]).addTo(map).bindPopup('<a href="' + link + '">' +  name + '</a>' );
-      });
+         $.each( data, function( obj, f ) {
+            var lon = f["longitude"];
+            var lat = f["latitude"];
+            var name= f["name"];
+            var link= f["link"];
+            L.marker([ lat, lon ]).addTo(map).bindPopup('<a href="' + link + '">' +  name + '</a>' );
+         });
       });
 
+      //
+      // This is just for debugging, really.
+      //
       var popup = L.popup();
       function onMapClick(e) {
-      popup
-      .setLatLng(e.latlng)
-      .setContent("You clicked the map at " + e.latlng.toString())
-      .openOn(map);
+        popup
+         .setLatLng(e.latlng)
+         .setContent("You clicked the map at " + e.latlng.toString())
+         .openOn(map);
       }
       map.on('click', onMapClick);
+
+      //
+      // When any movement occurs & ends update our cookies.
+      //
+      // This will ensure when the user returns to the map they're
+      // in the same place.
+      //
+      map.on('moveend', function(e) {
+         var pos = map.getCenter();
+         $.cookie("lat", pos.lat);
+         $.cookie("long",pos.lng);
+         $.cookie("zoom", map.getZoom() );
+      });
     </script>
   </body>
 </html>
-
