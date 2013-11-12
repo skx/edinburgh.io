@@ -302,6 +302,10 @@ sub createDataPage
     print $handle encode_json($data);
     close($handle);
 
+    open( my $jsonp, ">", "$CONFIG{'output'}/data/pubs.jsonp" );
+    print $jsonp "pubs(" . encode_json($data) . ")";
+    close($jsonp);
+
     #
     # Output the "XML" version.  Twice.
     #
