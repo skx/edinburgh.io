@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>JSONP demo</title>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+</head>
+<body>
+<script>
+//
+// Called when the JSONP data is loaded.
+//
+function pubs(data)
+{
+    $.each(data,function( key,val) {
+       $("#log").append( val["name"] + " " + val["link"] + "\n" );
+    });
+}
+
+(function() {
+
+    //
+    // Make the request, even cross-domain.
+    //
+    $.ajax({
+        url:"http://edinburgh.io/data/pubs.jsonp?callback=?",
+        dataType:'jsonp',
+        crossDomain:true,
+        //success:function(data){alert(data);}
+    });
+})();
+</script>
+<h1>JSONP Demo</h1>
+<blockquote>
+    <p>This example loads the <a href="http://edinburgh.io/data/">pub data</a> via a JSONP request - so it works even cross-domain.</P>
+    <p>Shortly after loading the following textbox should be populated with data.</p>
+
+<textarea id="log" rows="40" cols="80"></textarea>
+</blockquote>
+</body>
+
+</html>
