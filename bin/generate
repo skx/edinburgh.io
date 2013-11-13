@@ -313,7 +313,7 @@ sub createDataPage
         my $d = $DATA{ $key };
         $d->{ "link" } =
           "http://edinburgh.io/pubs/" . $d->{ 'sname' } . ".html";
-        push( @$data, $d );
+        push( @$data, $d ) unless( $d->{'closed'} );
     }
 
     #
