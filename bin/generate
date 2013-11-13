@@ -313,7 +313,13 @@ sub createDataPage
         my $d = $DATA{ $key };
         $d->{ "link" } =
           "http://edinburgh.io/pubs/" . $d->{ 'sname' } . ".html";
-        push( @$data, $d ) unless( $d->{'closed'} );
+
+        #
+        #  If the pub is closed/replaced then we don't include it
+        # in the dump - because the successor should be present
+        # instead.
+        #
+        push( @$data, $d ) unless ( $d->{ 'closed' } );
     }
 
     #
