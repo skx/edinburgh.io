@@ -125,6 +125,35 @@ sub createVenues
         }
 
         #
+        #  Setup past names.
+        #
+        my $prev = $DATA{ $venue }{ 'previously' };
+        delete $DATA{ $venue }{ 'previously' };
+
+        if ($prev)
+        {
+            my $previous = undef;
+            foreach my $past ( split( /,/, $prev ) )
+            {
+
+                #
+                #  Split
+                #
+                if ( $past =~ /(.*)\[(.*)\]/ )
+                {
+                    my $name  = $1;
+                    my $sname = $2;
+                    push( @$previous,
+                          {  name  => $name,
+                             sname => $sname
+                          } );
+                }
+            }
+            $DATA{ $venue }{ 'previously' } = $previous if ($previous);
+        }
+
+
+        #
         #  The short-name should have a .html suffix, if it doesn't.
         #
         $sname .= ".html" unless ( $sname =~ /\.html$/i );
@@ -441,10 +470,22 @@ venue.tmpl:
   </div>
   </blockquote>
   <!-- /tmpl_if name='images' -->
-  <h2>History</h2>
+
+  <!-- tmpl_if name='closed' -->
+  <h2>Closed</h2>
   <blockquote>
-  <p>TODO.</p>
+    <p>This pub is now closed, and exists for historical reference only.</p>
   </blockquote>
+  <!-- /tmpl_if -->
+
+  <!-- tmpl_if name='previously' -->
+  <h2>Previously</h2>
+    <blockquote>
+    <!-- tmpl_loop name='previously' -->
+    <p><a href="/pubs/<!-- tmpl_var name='sname' -->.html"><!-- tmpl_var name='name' --></a>.</p>
+    <!-- /tmpl_loop -->
+    </blockquote>
+   <!-- /tmpl_if name='previously' -->
   </div>
   </body>
   </html>
