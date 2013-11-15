@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Edinburgh Pubs: <!-- tmpl_var name='name' --></title>
+    <link href="/css/style.css" rel="stylesheet" media="all">
+    <link type="text/plain" rel="author" href="/humans.txt" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/js/portfolio.pack.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+      var p = $("#gallery").portfolio({enableKeyboardNavigation: true, loop: true});
+      p.init();
+      });
+    </script>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-45709040-1']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="page">
+      <div id="header">
+        <h3><span style="font-size:40px"><a href="/">Edinburgh.io</a></span> - The definitive Edinburgh Pub List.</h3>
+      </div>
+      <div id="navigation">
+        <ul>
+          <li><a href="/contact/">Contact</a></li>
+          <li><a href="/faq/">FAQ</a></li>
+          <li><a href="/pubs/a-z/">A-Z</a></li>
+          <li><a href="/pubs/">Home</a></li>
+        </ul>
+      </div>
+
+      <!-- This is a "microformat" to describe the data on this page programattically. -->
+      <div id="location" class="vcard" style="display:none;">
+        <div class="adr">
+          <a class="url fn" href="<!-- tmpl_var name='link' -->"><!-- tmpl_var name='name' --></a>
+          <div class="street-address"><!-- tmpl_var name='address' --></div>
+        </div>
+        <div class="tel"><!--tmpl_var name='telephone' --></div>
+        <abbr class="geo" title="<!-- tmpl_var name='latitude' -->;<!-- tmpl_var name='longitude' -->"><!-- tmpl_var name='name' --></abbr>
+      </div>
+      <div id="main">
+        <p>&nbsp;</p><h1><!-- tmpl_var name='name' --></h1>
+        <h2>Summary</h2>
+        <blockquote>
+          <!-- tmpl_var name='address' -->
+          <!-- tmpl_if name='telephone' -->
+          <p>Telephone: <!-- tmpl_var name='telephone' --></p>
+          <!-- /tmpl_if -->
+          <!-- tmpl_if name='website' -->
+          <p>Website: <a href="<!-- tmpl_var name='website' -->"><!-- tmpl_var name='website' --></a></p>
+          <!-- /tmpl_if -->
+          <p>GPS: <a href="/pubs/#lat=<!-- tmpl_var name='latitude' -->,long=<!-- tmpl_var name='longitude' -->"><!-- tmpl_var name='latitude' -->,<!-- tmpl_var name='longitude' --></a></p>
+        </blockquote>
+        <!-- tmpl_if name='has_images' -->
+        <h2>Images</h2>
+        <blockquote>
+          <div id="gallery">
+            <!-- tmpl_loop name='images' -->
+            <img data-src="/<!-- tmpl_var name='path' -->" />
+            <!-- /tmpl_loop -->
+          </div>
+        </blockquote>
+        <!-- /tmpl_if name='images' -->
+
+        <!-- tmpl_if name='closed' -->
+        <h2>Closed</h2>
+        <blockquote>
+          <p>This pub is now closed, and exists for historical reference only.</p>
+        </blockquote>
+        <!-- /tmpl_if -->
+
+        <!-- tmpl_if name='previously' -->
+        <h2>Previously</h2>
+        <blockquote>
+          <!-- tmpl_loop name='previously' -->
+          <p><a href="/pubs/<!-- tmpl_var name='sname' -->.html"><!-- tmpl_var name='name' --></a>.</p>
+          <!-- /tmpl_loop -->
+        </blockquote>
+        <!-- /tmpl_if name='previously' -->
+      </div>
+    </div>
+  </body>
+</html>
