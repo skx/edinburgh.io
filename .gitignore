@@ -3,3 +3,4 @@ syntax: glob
 htdocs/pubs/
 htdocs/images/
 htdocs/data/
+htdocs/recent/
