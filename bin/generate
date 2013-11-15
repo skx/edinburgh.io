@@ -344,8 +344,7 @@ sub createDataPage
     #
     # Output the "XML" version.  Twice.
     #
-    my @txt = loadTemplate("index.txt.tmpl");
-    my $template = HTML::Template->new( arrayref          => \@txt,
+    my $template = HTML::Template->new( filename => "./templates/data.xml.tmpl",
                                         die_on_bad_params => 0 );
 
     $template->param( xml => $data );
@@ -359,8 +358,7 @@ sub createDataPage
     #
     #  Finally output the CSV version.
     #
-    my @csv = loadTemplate("csv.tmpl");
-    my $csvt = HTML::Template->new( arrayref          => \@csv,
+    my $csvt = HTML::Template->new( filename => "./templates/data.csv.tmpl",
                                     die_on_bad_params => 0 );
 
     $csvt->param( data => $data );
@@ -401,77 +399,3 @@ sub createRecentPage
     print $handle $csvt->output();
     close($handle);
 }
-
-
-=begin doc
-
-Load a "file" from beneath the "__DATA__" section.
-
-This resets the DATA handle to allow re-reading more than once, if
-necessary, and only works because the __DATA__ section is formatted
-as follows:
-
-=for example begin
-
-filename:
-  DATA - prefixed by two spaces.
-  DATA
-filename2:
-  DATA - prefixed by two spaces.
-  ..
-
-=for example end
-
-=cut
-
-sub loadTemplate
-{
-    my ($file) = (@_);
-
-    # save the position
-    my $data_pos = tell DATA;
-
-    my %hash;
-    my $filename = undef;
-
-    while ( my $line = <DATA> )
-    {
-        chomp($line);
-        if ( $line =~ /^  (.*)/ )
-        {
-            $hash{ $filename } .= $1 . "\n";
-        }
-        elsif ( $line =~ /^(.*):$/ )
-        {
-            $filename = $1;
-        }
-    }
-
-    # reset
-    seek DATA, $data_pos, 0;
-
-    my $content = $hash{ $file } || undef;
-    die "File not found in __DATA__ section: $file"
-      if ( !$content );
-    return ($content);
-}
-
-__DATA__
-venue.tmpl:
-index.txt.tmpl:
-  <!-- tmpl_loop name='xml' -->
-  <pub>
-  <name><!-- tmpl_var name='name' --></name>
-  <sname><!-- tmpl_var name='sname' --></sname>
-  <link><!-- tmpl_var name='link' --></link>
-  <address><!-- tmpl_var name='address' --></address>
-  <latitude><!-- tmpl_var name='latitude' --></latitude>
-  <longitude><!-- tmpl_var name='longitude' --></longitude>
-  <website><!-- tmpl_var name='website' --></website>
-  <telephone><!-- tmpl_var name='telephone' --></telephone>
-  </pub>
-  <!-- /tmpl_loop -->
-csv.tmpl:
-  "Name", "Address", "Latitude", "Longitude", "Link"
-  <!-- tmpl_loop name='data' -->"<!-- tmpl_var name='name' -->", "<!-- tmpl_var name='address' -->", "<!-- tmpl_var name='latitude' -->", "<!-- tmpl_var name='longitude' -->, "<!-- tmpl_var name='link' -->"
-  <!-- /tmpl_loop -->
