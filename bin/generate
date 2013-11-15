@@ -722,7 +722,7 @@ recent.html.tmpl:
   </div>
   <div id="main">
   <p>&nbsp;</p><h1>Recent Additions</h1>
-  <ul>
+  <ul style="list-style:none;">
   <!-- tmpl_loop name='data' -->
    <li><a href="<!-- tmpl_var name='link' -->"><!-- tmpl_var name='name' --></a></li>
   <!-- /tmpl_loop -->
