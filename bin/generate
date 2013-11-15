@@ -461,7 +461,7 @@ sub loadTemplate
     seek DATA, $data_pos, 0;
 
     my $content = $hash{ $file } || undef;
-    die "File not found in __DATA__ seciont: $file"
+    die "File not found in __DATA__ section: $file"
       if ( !$content );
     return ($content);
 }
