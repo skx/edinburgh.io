@@ -728,7 +728,6 @@ recent.html.tmpl:
   <!-- /tmpl_loop -->
   </ul>
   </div>
-  </blockquote>
   </div>
   </body>
   </html>
