@@ -396,8 +396,7 @@ sub createRecentPage
     }
 
 
-    my @recent = loadTemplate("recent.html.tmpl");
-    my $csvt = HTML::Template->new( arrayref          => \@recent,
+    my $csvt = HTML::Template->new( filename => "./templates/recent.html.tmpl",
                                     die_on_bad_params => 0 );
 
     $csvt->param( data => $loop );
@@ -678,57 +677,3 @@ csv.tmpl:
   "Name", "Address", "Latitude", "Longitude", "Link"
   <!-- tmpl_loop name='data' -->"<!-- tmpl_var name='name' -->", "<!-- tmpl_var name='address' -->", "<!-- tmpl_var name='latitude' -->", "<!-- tmpl_var name='longitude' -->, "<!-- tmpl_var name='link' -->"
   <!-- /tmpl_loop -->
-recent.html.tmpl:
-   <!DOCTYPE html>
-   <html>
-   <head>
-   <title>Edinburgh Pubs: Recent Additions</title>
-   <link href="/css/style.css" rel="stylesheet" media="all">
-   <link type="text/plain" rel="author" href="/humans.txt" />
-   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-   <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-45709040-1']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-  </head>
-  <body>
-   <div id="page">
-    <div id="header">
-      <h3><span style="font-size:40px"><a href="/">Edinburgh.io</a></span> - The definitive Edinburgh Pub List.</h3>
-    </div>
-   <div id="navigation">
-   <ul>
-    <li><a href="/contact/">Contact</a></li>
-    <li><a href="/faq/">FAQ</a></li>
-    <li><a href="/pubs/a-z/">A-Z</a></li>
-    <li><a href="/pubs/">Home</a></li>
-   </ul>
-   </div>
-  <!-- This is a "microformat" to describe the data on this page programattically. -->
-  <div id="location" class="vcard" style="display:none;">
-  <div class="adr">
-  <a class="url fn" href="">Alhambra Bar</a>
-  <div class="street-address">227 Leith Walk, Edinburgh, EH6 8NX</div>
-  </div>
-  <div class="tel">+44 131 554 4868</div>
-  <abbr class="geo" title="55.96670;-3.17495">Alhambra Bar</abbr>
-  </div>
-  <div id="main">
-  <p>&nbsp;</p><h1>Recent Additions</h1>
-  <ul style="list-style:none;">
-  <!-- tmpl_loop name='data' -->
-   <li><a href="<!-- tmpl_var name='link' -->"><!-- tmpl_var name='name' --></a></li>
-  <!-- /tmpl_loop -->
-  </ul>
-  </div>
-  </div>
-  </body>
-  </html>
-
