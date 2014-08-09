@@ -104,6 +104,7 @@ sub process
 #
 sub createVenues
 {
+
     #
     #  For each venue.
     #
@@ -277,7 +278,7 @@ sub createA2Z
               } );
 
         my $template =
-          HTML::Template->new( filename => "./templates/letter.html.tmpl" ,
+          HTML::Template->new( filename => "./templates/letter.html.tmpl",
                                die_on_bad_params => 0 );
 
         $template->param( loop => $loop ) if ($loop);
@@ -303,7 +304,7 @@ sub createA2Z
     #
     #  Now the a-z
     #
-    my $template = HTML::Template->new( filename => "./templates/a-z.html.tmpl" ,
+    my $template = HTML::Template->new( filename => "./templates/a-z.html.tmpl",
                                         die_on_bad_params => 0 );
 
     $template->param( index => $index );
@@ -346,7 +347,8 @@ sub createDataPage
         # in the dump - because the successor should be present
         # instead.
         #
-        push( @$data, $d ) unless ( $d->{ 'closed' } );
+        push( @$data, $d )
+          unless ( ( $d->{ 'closed' } || ( $d->{ 'currently' } ) ) );
     }
 
     #
@@ -403,15 +405,15 @@ sub createDataPage
 #
 sub createRecentPage
 {
-    my @sorted = sort { -M $a <=> -M $b }  (keys %DATA );
+    my @sorted = sort {-M $a <=> -M $b} ( keys %DATA );
 
     my $loop;
     my $count = 0;
-    foreach my $file ( @sorted )
+    foreach my $file (@sorted)
     {
         next if ( $count > 10 );
-        push( @$loop, $DATA{$file} );
-        $count ++;
+        push( @$loop, $DATA{ $file } );
+        $count++;
     }
 
 
