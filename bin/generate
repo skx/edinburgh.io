@@ -130,6 +130,7 @@ sub createVenues
         my $prev = $DATA{ $venue }{ 'previously' };
         delete $DATA{ $venue }{ 'previously' };
 
+
         if ($prev)
         {
             my $previous = undef;
@@ -151,6 +152,35 @@ sub createVenues
             }
             $DATA{ $venue }{ 'previously' } = $previous if ($previous);
         }
+
+        #
+        #  If a pub has been renamed to something else then handle that.
+        #
+        my $cur = $DATA{ $venue }{ 'currently' };
+        delete $DATA{ $venue }{ 'currently' };
+
+        if ($cur)
+        {
+            my $current = undef;
+            foreach my $past ( split( /,/, $cur ) )
+            {
+
+                #
+                #  Split
+                #
+                if ( $past =~ /(.*)\[(.*)\]/ )
+                {
+                    my $name  = $1;
+                    my $sname = $2;
+                    push( @$current,
+                          {  name  => $name,
+                             sname => $sname
+                          } );
+                }
+            }
+            $DATA{ $venue }{ 'currently' } = $current if ($current);
+        }
+
 
 
         #
