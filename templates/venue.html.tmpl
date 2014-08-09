@@ -79,6 +79,17 @@
         </blockquote>
         <!-- /tmpl_if -->
 
+
+
+        <!-- tmpl_if name='currently' -->
+        <h2>Currently</h2>
+        <blockquote>
+          <!-- tmpl_loop name='currently' -->
+          <p>This venue is currently <a href="/pubs/<!-- tmpl_var name='sname' -->.html"><!-- tmpl_var name='name' --></a>.</p>
+          <!-- /tmpl_loop -->
+        </blockquote>
+        <!-- /tmpl_if name='currently' -->
+
         <!-- tmpl_if name='previously' -->
         <h2>Previously</h2>
         <blockquote>
