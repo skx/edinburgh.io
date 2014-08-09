@@ -72,7 +72,7 @@
       // Otherwise we'll read from the window-hash, if present.
       //
       if (window.location.hash) {
-        var r = /^#lat=([0-9.]+),long=([0-9.]+)/;
+        var r = /^#lat=([0-9.-]+),long=([0-9.-]+)/;
         var m = r.exec( window.location.hash );
         if ( m ) {
           la = m[1];
